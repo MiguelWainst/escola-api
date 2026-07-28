@@ -4,6 +4,7 @@ import com.escola.escola_api.controller.dto.ErroCampo;
 import com.escola.escola_api.controller.dto.ErroResposta;
 import com.escola.escola_api.exception.DuplicateRegisterException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,6 +37,16 @@ public class GlobalExceptionHandler {
         return new ErroResposta(
                 HttpStatus.CONFLICT.value(),
                 e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroResposta handleHttpMessageNotReadableException() {
+        return new ErroResposta(
+                HttpStatus.BAD_REQUEST.value(),
+                "Formato de dados inválidos",
                 List.of()
         );
     }
