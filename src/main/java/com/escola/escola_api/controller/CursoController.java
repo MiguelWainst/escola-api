@@ -4,6 +4,7 @@ import com.escola.escola_api.controller.dto.CursoDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.mapper.CursoMapper;
 import com.escola.escola_api.service.CursoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class CursoController implements GenericController{
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody CursoDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody @Valid CursoDTO dto) {
         Curso entity = cursoMapper.toEntity(dto);
         cursoService.salvar(entity);
 
