@@ -30,4 +30,8 @@ public class CursoService {
     public void atualizar(Curso curso) {
         cursoRepository.save(curso);
     }
+
+    public void delete(Curso curso) {
+        cursoRepository.delete(curso);
+    }
 }

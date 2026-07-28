@@ -62,4 +62,14 @@ public class CursoController implements GenericController{
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletar(@PathVariable String id) {
+        return cursoService.buscarPorId(UUID.fromString(id))
+                .map(curso -> {
+                    cursoService.delete(curso);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
