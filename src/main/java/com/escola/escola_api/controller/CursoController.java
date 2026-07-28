@@ -49,4 +49,17 @@ public class CursoController implements GenericController{
                 .map(curso -> ResponseEntity.ok(cursoMapper.toDTO(curso)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> atualizar(
+            @PathVariable String id, @RequestBody @Valid CursoCadastroDTO dto
+    ) {
+        return cursoService.buscarPorId(UUID.fromString(id))
+                .map(cursoFound -> {
+                    cursoMapper.updateEntityFromDTO(dto, cursoFound);
+                    cursoService.atualizar(cursoFound);
+                    return ResponseEntity.ok().build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

@@ -26,4 +26,8 @@ public class CursoService {
     public Optional<Curso> buscarPorId(UUID id) {
         return cursoRepository.findById(id);
     }
+
+    public void atualizar(Curso curso) {
+        cursoRepository.save(curso);
+    }
 }
