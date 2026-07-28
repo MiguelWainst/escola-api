@@ -2,6 +2,7 @@ package com.escola.escola_api.service;
 
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.CursoRepository;
+import com.escola.escola_api.validator.CursoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,10 @@ import java.util.UUID;
 public class CursoService {
 
     private final CursoRepository cursoRepository;
+    private final CursoValidator validator;
 
     public void salvar(Curso curso){
+        validator.validar(curso);
         cursoRepository.save(curso);
     }
 
@@ -28,6 +31,7 @@ public class CursoService {
     }
 
     public void atualizar(Curso curso) {
+        validator.validar(curso);
         cursoRepository.save(curso);
     }
 
