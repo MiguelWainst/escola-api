@@ -1,0 +1,38 @@
+create table cursos(
+	id uuid primary key not null,
+	nome varchar(70) not null,
+	carga_horas decimal(4,1)
+)
+
+create table professores(
+	matricula numeric(6) primary key not null,
+	nome varchar(70) not null,
+	email varchar(50),
+	data_nascimento date,
+	cpf varchar(11),
+	data_de_entrada timestamp not null,
+	data_atualizacao timestamp,
+	usuario_atualizacao varchar(100)
+)
+
+create table professores_cursos(
+	matricula_professor numeric(6) not null,
+	id_curso uuid not null,
+	primary key(matricula_professor, id_curso),
+	constraint fk_prof_curso_professor foreign key (matricula_professor) references professores(matricula),
+	constraint fk_prof_curso_curso foreign key (id_curso) references cursos(id)
+)
+
+create table alunos(
+	matricula numeric(6) primary key not null,
+	nome varchar(70) not null,
+	email varchar(50),
+	data_nascimento date,
+	cpf varchar(11),
+	data_matricula timestamp not null,
+	data_atualizacao timestamp,
+	usuario_atualizacao varchar(100),
+	id_curso uuid,
+
+	constraint fk_aluno_curso foreign key (id_curso) references cursos(id)
+)
