@@ -5,6 +5,8 @@ import com.escola.escola_api.repository.CursoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CursoService {
@@ -13,5 +15,9 @@ public class CursoService {
 
     public void salvar(Curso curso){
         cursoRepository.save(curso);
+    }
+
+    public List<Curso> buscarTodos() {
+        return cursoRepository.findAll();
     }
 }
