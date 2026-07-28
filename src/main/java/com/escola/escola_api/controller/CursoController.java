@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,5 +39,12 @@ public class CursoController implements GenericController{
         URI location = gerarHeaderLocation(entity.getId());
 
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CursoDTO> buscarPorId(@PathVariable String id) {
+        return cursoService.buscarPorId(UUID.fromString(id))
+                .map(curso -> ResponseEntity.ok(cursoMapper.toDTO(curso)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
