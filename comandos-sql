@@ -1,7 +1,10 @@
 create table cursos(
 	id uuid primary key not null,
 	nome varchar(70) not null,
-	carga_horas decimal(4,1)
+	carga_horas decimal(4,1),
+	data_criacao timestamp not null,
+    data_atualizacao timestamp,
+    usuario_atualizacao varchar(100)
 )
 
 create table professores(
@@ -10,7 +13,7 @@ create table professores(
 	email varchar(50),
 	data_nascimento date,
 	cpf varchar(11),
-	data_de_entrada timestamp not null,
+	data_contratacao timestamp not null,
 	data_atualizacao timestamp,
 	usuario_atualizacao varchar(100)
 )
@@ -35,4 +38,11 @@ create table alunos(
 	id_curso uuid,
 
 	constraint fk_aluno_curso foreign key (id_curso) references cursos(id)
+)
+
+create table usuarios(
+	id uuid primary key not null,
+	username varchar(50),
+	email varchar(70),
+	senha varchar(200)
 )
