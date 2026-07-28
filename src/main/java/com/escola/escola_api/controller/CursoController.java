@@ -37,9 +37,7 @@ public class CursoController implements GenericController{
     public ResponseEntity<Void> salvar(@RequestBody @Valid CursoCadastroDTO dto) {
         Curso entity = cursoMapper.toEntity(dto);
         cursoService.salvar(entity);
-
         URI location = gerarHeaderLocation(entity.getId());
-
         return ResponseEntity.created(location).build();
     }
 
