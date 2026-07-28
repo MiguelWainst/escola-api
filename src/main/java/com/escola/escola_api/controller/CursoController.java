@@ -1,6 +1,7 @@
 package com.escola.escola_api.controller;
 
-import com.escola.escola_api.controller.dto.CursoDTO;
+import com.escola.escola_api.controller.dto.CursoCadastroDTO;
+import com.escola.escola_api.controller.dto.CursoPesquisaDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.mapper.CursoMapper;
 import com.escola.escola_api.service.CursoService;
@@ -23,9 +24,9 @@ public class CursoController implements GenericController{
     private final CursoMapper cursoMapper;
 
     @GetMapping
-    public ResponseEntity<List<CursoDTO>> listar() {
+    public ResponseEntity<List<CursoPesquisaDTO>> listar() {
         List<Curso> cursos = cursoService.buscarTodos();
-        List<CursoDTO> dtos = cursos
+        List<CursoPesquisaDTO> dtos = cursos
                 .stream()
                 .map(cursoMapper::toDTO)
                 .collect(Collectors.toList());
@@ -33,7 +34,7 @@ public class CursoController implements GenericController{
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody @Valid CursoDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody @Valid CursoCadastroDTO dto) {
         Curso entity = cursoMapper.toEntity(dto);
         cursoService.salvar(entity);
 
@@ -43,7 +44,7 @@ public class CursoController implements GenericController{
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CursoDTO> buscarPorId(@PathVariable String id) {
+    public ResponseEntity<CursoPesquisaDTO> buscarPorId(@PathVariable String id) {
         return cursoService.buscarPorId(UUID.fromString(id))
                 .map(curso -> ResponseEntity.ok(cursoMapper.toDTO(curso)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
