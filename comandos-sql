@@ -44,5 +44,6 @@ create table usuarios(
 	id uuid primary key not null,
 	username varchar(50),
 	email varchar(70),
-	senha varchar(200)
+	senha varchar(200),
+	roles varchar[]
 )
