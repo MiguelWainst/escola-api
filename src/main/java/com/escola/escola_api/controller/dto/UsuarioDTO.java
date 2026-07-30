@@ -5,7 +5,8 @@ import java.util.UUID;
 
 public record UsuarioDTO(
     UUID id,
-    String nome,
+    String username,
+    String senha,
     String email,
     List<String> roles
 ) {
