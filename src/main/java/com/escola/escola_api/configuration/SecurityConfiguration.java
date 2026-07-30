@@ -1,4 +1,4 @@
-package com.escola.escola_api.controller.configuration;
+package com.escola.escola_api.configuration;
 
 import com.escola.escola_api.security.CustomUserDetailService;
 import com.escola.escola_api.service.UsuarioService;
