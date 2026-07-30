@@ -17,4 +17,12 @@ public class UsuarioService {
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuarioRepository.save(usuario);
     }
+
+    public Usuario obterPorEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
+    public Usuario obterPorUsername(String username) {
+        return usuarioRepository.findByUsername(username);
+    }
 }
