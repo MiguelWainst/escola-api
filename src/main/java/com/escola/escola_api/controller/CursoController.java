@@ -8,6 +8,7 @@ import com.escola.escola_api.service.CursoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -33,6 +34,7 @@ public class CursoController implements GenericController{
         return ResponseEntity.ok(dtos);
     }
 
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PostMapping
     public ResponseEntity<Void> salvar(@RequestBody @Valid CursoCadastroDTO dto) {
         Curso entity = cursoMapper.toEntity(dto);
@@ -48,6 +50,7 @@ public class CursoController implements GenericController{
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PutMapping("/{id}")
     public ResponseEntity<Object> atualizar(
             @PathVariable String id, @RequestBody @Valid CursoCadastroDTO dto
@@ -61,6 +64,7 @@ public class CursoController implements GenericController{
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletar(@PathVariable String id) {
         return cursoService.buscarPorId(UUID.fromString(id))
