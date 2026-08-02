@@ -5,11 +5,14 @@ import com.escola.escola_api.controller.dto.ErroResposta;
 import com.escola.escola_api.exception.DuplicateRegisterException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestControllerAdvice
@@ -47,6 +50,26 @@ public class GlobalExceptionHandler {
         return new ErroResposta(
                 HttpStatus.BAD_REQUEST.value(),
                 "Formato de dados inválidos",
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroResposta handleAuthorizationDeniedException() {
+        return new ErroResposta(
+                HttpStatus.FORBIDDEN.value(),
+                "Acesso negado: Não tem permissão necessária para a ação.",
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroResposta handleAccessDeniedException() {
+        return new ErroResposta(
+                HttpStatus.FORBIDDEN.value(),
+                "Acesso negado: Não tem permissão necessária para a ação.",
                 List.of()
         );
     }
