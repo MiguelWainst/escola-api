@@ -17,8 +17,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private UsuarioService usuarioService;
-    private PasswordEncoder passwordEncoder;
+    final private UsuarioService usuarioService;
+    final private PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
