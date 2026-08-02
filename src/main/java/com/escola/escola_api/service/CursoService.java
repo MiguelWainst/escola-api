@@ -4,6 +4,8 @@ import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.validator.CursoValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
