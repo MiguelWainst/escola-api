@@ -9,7 +9,12 @@ import java.util.Collection;
 
 public class CustomAuthentication implements Authentication {
 
-    private final Usuario usuario = new Usuario();
+    private final Usuario usuario;
+
+    public CustomAuthentication(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
