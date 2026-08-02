@@ -34,7 +34,7 @@ public class CursoController implements GenericController{
         return ResponseEntity.ok(dtos);
     }
 
-    @PreAuthorize("hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
     @PostMapping
     public ResponseEntity<Void> salvar(@RequestBody @Valid CursoCadastroDTO dto) {
         Curso entity = cursoMapper.toEntity(dto);
@@ -50,7 +50,7 @@ public class CursoController implements GenericController{
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Object> atualizar(
             @PathVariable String id, @RequestBody @Valid CursoCadastroDTO dto
