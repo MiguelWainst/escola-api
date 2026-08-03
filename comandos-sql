@@ -4,7 +4,7 @@ create table cursos(
 	carga_horas decimal(4,1),
 	data_criacao timestamp not null,
     data_atualizacao timestamp,
-    usuario_atualizacao varchar(100)
+    usuario_atualizacao uuid
 )
 
 create table professores(
@@ -15,7 +15,7 @@ create table professores(
 	cpf varchar(11),
 	data_contratacao timestamp not null,
 	data_atualizacao timestamp,
-	usuario_atualizacao varchar(100)
+	usuario_atualizacao uuid
 )
 
 create table professores_cursos(
@@ -47,3 +47,18 @@ create table usuarios(
 	senha varchar(200),
 	roles varchar[]
 )
+
+-- Cria a sequence começando em 100000 (garante 6 dígitos)
+CREATE SEQUENCE professores_seq
+  START WITH 100000
+  INCREMENT BY 1
+  MINVALUE 100000
+  MAXVALUE 999999;
+
+-- 1. Mudar na tabela cursos
+ALTER TABLE cursos
+  ALTER COLUMN usuario_atualizacao TYPE uuid USING usuario_atualizacao::uuid;
+
+-- 2. Mudar na tabela professores
+ALTER TABLE professores
+  ALTER COLUMN usuario_atualizacao TYPE uuid USING usuario_atualizacao::uuid;

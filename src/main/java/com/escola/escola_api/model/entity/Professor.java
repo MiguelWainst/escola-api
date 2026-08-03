@@ -19,8 +19,13 @@ import java.util.UUID;
 public class Professor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "professor_seq_gen")
+    @SequenceGenerator(
+            name = "professor_seq_gen",
+            sequenceName = "professores_seq",
+            allocationSize = 1
+    )
+    private Integer matricula;
 
     private String nome;
 
@@ -41,8 +46,8 @@ public class Professor {
     @ManyToMany
     @JoinTable(
             name = "professores_cursos",
-            joinColumns = @JoinColumn(name = "matricula_professor"),
-            inverseJoinColumns = @JoinColumn(name = "id_curso")
+            joinColumns = @JoinColumn(name = "matricula_professor", referencedColumnName = "matricula"),
+            inverseJoinColumns = @JoinColumn(name = "id_curso", referencedColumnName = "id")
     )
     private List<Curso> cursos;
 }
