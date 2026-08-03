@@ -1,15 +1,17 @@
 package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.ProfessorCadastroDTO;
+import com.escola.escola_api.controller.dto.ProfessorPesquisaDTO;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.mapper.ProfessorMapper;
 import com.escola.escola_api.service.ProfessorService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/professores")
@@ -24,5 +26,12 @@ public class ProfessorController {
         Professor professor = professorMapper.toEntity(dto);
         professorService.salvar(professor, dto.idCurso());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProfessorPesquisaDTO>> listar() {
+        List<Professor> entityList = professorService.listar();
+        List<ProfessorPesquisaDTO> dtos = entityList.stream().map(professorMapper::toDTO).collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 }

@@ -5,7 +5,7 @@ import com.escola.escola_api.controller.dto.ProfessorPesquisaDTO;
 import com.escola.escola_api.model.entity.Professor;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CursoMapper.class})
 public interface ProfessorMapper {
 
     Professor toEntity(ProfessorCadastroDTO dto);

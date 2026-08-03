@@ -30,4 +30,7 @@ public class ProfessorService {
         professorRepository.save(professor);
     }
 
+    public List<Professor> listar() {
+        return professorRepository.findAll();
+    }
 }
