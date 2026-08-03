@@ -5,6 +5,7 @@ import com.escola.escola_api.controller.dto.ProfessorPesquisaDTO;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.mapper.ProfessorMapper;
 import com.escola.escola_api.service.ProfessorService;
+import io.micrometer.observation.Observation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,11 @@ public class ProfessorController implements GenericController{
 
     @GetMapping
     public ResponseEntity<List<ProfessorPesquisaDTO>> listar() {
-        List<Professor> entityList = professorService.listar();
-        List<ProfessorPesquisaDTO> dtos = entityList.stream().map(professorMapper::toDTO).collect(Collectors.toList());
+        List<Professor> entityList = professorService.obterTodos();
+        List<ProfessorPesquisaDTO> dtos = entityList
+                .stream()
+                .map(professorMapper::toDTO)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 }
