@@ -104,4 +104,14 @@ public class GlobalExceptionHandler {
                 List.of()
         );
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErroResposta handleRuntimeException(RuntimeException e) {
+        return new ErroResposta(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Erro: Ocorreu um erro interno no servidor.",
+                List.of()
+        );
+    }
 }
