@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "cursos")
@@ -30,4 +31,7 @@ public class Curso {
     private LocalDate dataAtualizacao;
 
     private UUID usuarioAtualizacao;
+
+    @ManyToMany(mappedBy = "cursos")
+    private List<Professor> professores;
 }
