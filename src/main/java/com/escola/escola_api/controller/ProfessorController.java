@@ -5,6 +5,7 @@ import com.escola.escola_api.controller.dto.ProfessorPesquisaDTO;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.mapper.ProfessorMapper;
 import com.escola.escola_api.service.ProfessorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ProfessorController implements GenericController{
     private final ProfessorMapper professorMapper;
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody ProfessorCadastroDTO dto) {
+    public ResponseEntity<?> salvar(@RequestBody @Valid ProfessorCadastroDTO dto) {
         Professor professor = professorMapper.toEntity(dto);
         professorService.salvar(professor, dto.idCurso());
         URI location = gerarHeaderLocationMatricula(professor.getMatricula());

@@ -3,6 +3,8 @@ package com.escola.escola_api.controller.common;
 import com.escola.escola_api.controller.dto.ErroCampo;
 import com.escola.escola_api.controller.dto.ErroResposta;
 import com.escola.escola_api.exception.DuplicateRegisterException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -10,10 +12,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -46,11 +49,39 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErroResposta handleHttpMessageNotReadableException() {
+    public ErroResposta handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+
+        List<ErroCampo> erros = new ArrayList<>();
+        String mensagemPadrao = "Formato de dados inválidos no corpo da requisição";
+
+        if (e.getCause() instanceof InvalidFormatException invalidFormatException) {
+
+            String campo = invalidFormatException.getPath().stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .collect(Collectors.joining("."));
+
+            Object valorInvalido = invalidFormatException.getValue();
+
+            String tipoEsperado = invalidFormatException.getTargetType().getSimpleName();
+
+            String detalhe = String.format("O valor '%s' é inválido para o campo '%s'. Esperado o tipo: %s",
+                    valorInvalido, campo, tipoEsperado);
+
+            erros.add(new ErroCampo(campo, detalhe));
+
+        } else if (e.getCause() instanceof JsonMappingException jsonMappingException) {
+
+            String campo = jsonMappingException.getPath().stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .collect(Collectors.joining("."));
+
+            erros.add(new ErroCampo(campo, "Sintaxe ou formato inválido para este campo"));
+        }
+
         return new ErroResposta(
                 HttpStatus.BAD_REQUEST.value(),
-                "Formato de dados inválidos",
-                List.of()
+                mensagemPadrao,
+                erros
         );
     }
 
