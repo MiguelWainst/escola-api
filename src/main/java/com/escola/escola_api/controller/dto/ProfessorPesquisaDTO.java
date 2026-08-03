@@ -13,7 +13,7 @@ public record ProfessorPesquisaDTO(
         String cpf,
         LocalDate dataContratacao,
         LocalDateTime dataAtualizacao,
-        Usuario usuarioAtualizacao
+        String usuarioAtualizacao
 
 ) {
 }
