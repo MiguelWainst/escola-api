@@ -1,10 +1,9 @@
 package com.escola.escola_api.controller.dto;
 
-import com.escola.escola_api.model.entity.Usuario;
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 public record ProfessorPesquisaDTO(
         String nome,
@@ -13,7 +12,7 @@ public record ProfessorPesquisaDTO(
         String cpf,
         LocalDate dataContratacao,
         LocalDateTime dataAtualizacao,
-        String usuarioAtualizacao
-
+        String usuarioAtualizacao,
+        List<UUID> id_curso
 ) {
 }
