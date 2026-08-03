@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,8 @@ public class ProfessorController implements GenericController{
     public ResponseEntity<?> salvar(@RequestBody ProfessorCadastroDTO dto) {
         Professor professor = professorMapper.toEntity(dto);
         professorService.salvar(professor, dto.idCurso());
-        return ResponseEntity.ok(gerarHeaderLocationMatricula(professor.getMatricula()));
+        URI location = gerarHeaderLocationMatricula(professor.getMatricula());
+        return ResponseEntity.ok(location);
     }
 
     @GetMapping
