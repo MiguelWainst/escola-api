@@ -14,4 +14,12 @@ public interface GenericController {
                 .buildAndExpand(id)
                 .toUri();
     }
+
+    default URI gerarHeaderLocationMatricula(Integer matricula) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{matricula}")
+                .buildAndExpand(matricula)
+                .toUri();
+    }
 }

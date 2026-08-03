@@ -5,7 +5,6 @@ import com.escola.escola_api.controller.dto.ProfessorPesquisaDTO;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.mapper.ProfessorMapper;
 import com.escola.escola_api.service.ProfessorService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +15,16 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/professores")
 @RequiredArgsConstructor
-public class ProfessorController {
+public class ProfessorController implements GenericController{
 
     private final ProfessorService professorService;
     private final ProfessorMapper professorMapper;
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody ProfessorCadastroDTO dto) {
+    public ResponseEntity<?> salvar(@RequestBody ProfessorCadastroDTO dto) {
         Professor professor = professorMapper.toEntity(dto);
         professorService.salvar(professor, dto.idCurso());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(gerarHeaderLocationMatricula(professor.getMatricula()));
     }
 
     @GetMapping
