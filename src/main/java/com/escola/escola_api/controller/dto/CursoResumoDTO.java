@@ -5,6 +5,6 @@ import java.util.UUID;
 public record CursoResumoDTO(
         UUID id,
         String nome,
-        String cargaHoras
+        Integer cargaHoras
 ) {
 }
