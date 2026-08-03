@@ -1,6 +1,5 @@
 package com.escola.escola_api.controller.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
