@@ -13,6 +13,6 @@ public record ProfessorPesquisaDTO(
         LocalDate dataContratacao,
         LocalDateTime dataAtualizacao,
         String usuarioAtualizacao,
-        List<UUID> id_curso
+        List<CursoResumoDTO> cursos
 ) {
 }
