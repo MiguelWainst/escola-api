@@ -6,6 +6,7 @@ import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.repository.ProfessorRepository;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.validator.ProfessorValidator;
+import io.micrometer.observation.ObservationFilter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,5 +41,12 @@ public class ProfessorService {
 
     public Optional<Professor> obterPorMatricula(Integer matricula) {
         return professorRepository.findByMatricula(matricula);
+    }
+
+    public void atualizar(Professor entity) {
+        if (entity.getMatricula() == null) {
+            throw new IllegalArgumentException("A matrícula do professor não pode ser nula");
+        }
+        professorRepository.save(entity);
     }
 }

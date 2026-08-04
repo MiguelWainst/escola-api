@@ -50,5 +50,16 @@ public class ProfessorController implements GenericController{
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{matricula}")
+    public ResponseEntity<?> atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorCadastroDTO dto) {
+        return professorService.obterPorMatricula(matricula).map(professor -> {
+            professorMapper.updateEntityFromDTO(dto, professor);
+            professorService.atualizar(professor);
+            return ResponseEntity.noContent().build();
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    //Copilot, faça o PUT para professor, use o mapper para atualizar
+
 
 }

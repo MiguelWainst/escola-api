@@ -108,6 +108,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErroResposta handleRuntimeException(RuntimeException e) {
+        e.printStackTrace();
         return new ErroResposta(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Erro: Ocorreu um erro interno no servidor.",
