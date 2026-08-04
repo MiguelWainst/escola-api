@@ -2,10 +2,7 @@ package com.escola.escola_api.controller.dto;
 
 import com.escola.escola_api.validator.DominioEmailValido;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
@@ -24,6 +21,7 @@ public record ProfessorCadastroDTO(
         @Past(message = "A data de nascimento deve ser uma data do passado") // 👈 Impede datas futuras!
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate dataNascimento,
+        @Size(max = 14, message = "O CPF não pode ter mais de 14 caracteres")
         @CPF(message = "CPF inválido. Certifique-se de enviar os 11 dígitos corretos")
         String cpf,
         List<UUID> idCurso
