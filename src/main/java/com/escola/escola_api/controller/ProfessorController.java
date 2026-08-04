@@ -59,7 +59,12 @@ public class ProfessorController implements GenericController{
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //Copilot, faça o PUT para professor, use o mapper para atualizar
-
+    @DeleteMapping("/{matricula}")
+    public ResponseEntity<?> deletar(@PathVariable Integer matricula) {
+        return professorService.obterPorMatricula(matricula).map(professor -> {
+            professorService.deletar(professor);
+            return ResponseEntity.noContent().build();
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

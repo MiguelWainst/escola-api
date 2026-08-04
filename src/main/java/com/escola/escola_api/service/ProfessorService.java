@@ -49,4 +49,11 @@ public class ProfessorService {
         }
         professorRepository.save(entity);
     }
+
+    public void deletar(Professor professor) {
+        if (professor == null) {
+            throw new IllegalArgumentException("O professor não pode ser nulo");
+        }
+        professorRepository.delete(professor);
+    }
 }
