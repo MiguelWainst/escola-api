@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,4 +41,14 @@ public class ProfessorController implements GenericController{
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
+
+    @GetMapping("/{matricula}")
+    public ResponseEntity<ProfessorPesquisaDTO> obterPorMatricula(@PathVariable Integer matricula) {
+        return professorService.obterPorMatricula(matricula).map(professor -> {
+            ProfessorPesquisaDTO dto = professorMapper.toDTO(professor);
+            return ResponseEntity.ok(dto);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
 }
