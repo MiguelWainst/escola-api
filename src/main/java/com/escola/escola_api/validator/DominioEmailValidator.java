@@ -1,13 +1,21 @@
 package com.escola.escola_api.validator;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.InitialDirContext;
+import java.util.concurrent.TimeUnit;
 
 public class DominioEmailValidator implements ConstraintValidator<DominioEmailValido, String> {
+
+    private static final Cache<String, Boolean> DOMINIO_CACHE = Caffeine.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(24, TimeUnit.HOURS)
+            .build();
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
@@ -15,10 +23,8 @@ public class DominioEmailValidator implements ConstraintValidator<DominioEmailVa
             return false;
         }
         String dominio = email.substring(email.indexOf("@") + 1).trim();
-        if (dominio.isEmpty()) {
-            return false;
-        }
-        return temRegistroMX(dominio);
+        if (dominio.isEmpty()) return false;
+        return DOMINIO_CACHE.get(dominio, this::temRegistroMX);
     }
 
     private boolean temRegistroMX(String dominio) {
