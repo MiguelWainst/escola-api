@@ -1,5 +1,6 @@
 package com.escola.escola_api.controller.dto;
 
+import com.escola.escola_api.validator.DominioEmailValido;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,6 +19,7 @@ public record ProfessorCadastroDTO(
         @NotBlank(message = "O email é obrigatório")
         @Size(max = 50, message = "O email não pode ter mais de 50 caracteres")
         @Email(message = "O email deve ser válido")
+        @DominioEmailValido(message = "O domínio do email é inválido")
         String email,
         @Past(message = "A data de nascimento deve ser uma data do passado") // 👈 Impede datas futuras!
         @JsonFormat(pattern = "yyyy-MM-dd")
