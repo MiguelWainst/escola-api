@@ -1,8 +1,8 @@
 package com.escola.escola_api.repository.mapper;
 
-import com.escola.escola_api.controller.dto.CursoCadastroDTO;
-import com.escola.escola_api.controller.dto.CursoPesquisaDTO;
-import com.escola.escola_api.controller.dto.CursoResumoDTO;
+import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
+import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
+import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.UsuarioRepository;
 import org.mapstruct.Mapper;

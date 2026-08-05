@@ -1,4 +1,4 @@
-package com.escola.escola_api.controller.dto;
+package com.escola.escola_api.controller.dto.aluno;
 
 import java.time.LocalDate;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.escola.escola_api.controller.dto;
+package com.escola.escola_api.controller.dto.professor;
 
 import com.escola.escola_api.validator.DominioEmailValido;
 import com.fasterxml.jackson.annotation.JsonFormat;

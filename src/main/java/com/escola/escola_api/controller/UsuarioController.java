@@ -1,6 +1,6 @@
 package com.escola.escola_api.controller;
 
-import com.escola.escola_api.controller.dto.UsuarioCadastroDTO;
+import com.escola.escola_api.controller.dto.usuario.UsuarioCadastroDTO;
 import com.escola.escola_api.repository.mapper.UsuarioMapper;
 import com.escola.escola_api.service.UsuarioService;
 import lombok.RequiredArgsConstructor;

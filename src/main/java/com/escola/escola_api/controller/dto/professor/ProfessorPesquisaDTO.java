@@ -1,9 +1,10 @@
-package com.escola.escola_api.controller.dto;
+package com.escola.escola_api.controller.dto.professor;
+
+import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 public record ProfessorPesquisaDTO(
         String nome,

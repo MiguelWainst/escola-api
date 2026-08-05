@@ -1,4 +1,4 @@
-package com.escola.escola_api.controller.dto;
+package com.escola.escola_api.controller.dto.usuario;
 
 public record UsuarioPesquisaDTO(
     String id,

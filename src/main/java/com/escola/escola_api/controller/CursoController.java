@@ -1,7 +1,7 @@
 package com.escola.escola_api.controller;
 
-import com.escola.escola_api.controller.dto.CursoCadastroDTO;
-import com.escola.escola_api.controller.dto.CursoPesquisaDTO;
+import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
+import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.mapper.CursoMapper;
 import com.escola.escola_api.service.CursoService;
