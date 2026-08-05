@@ -9,20 +9,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
 @RequiredArgsConstructor
-public class AlunoController {
+public class AlunoController implements GenericController {
 
     private final AlunoService alunoService;
     private final AlunoMapper mapper;
 
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody AlunoCadastroDTO dto) {
-        alunoService.salvar(mapper.toEntity(dto));
-        return ResponseEntity.ok().build();
+        Aluno aluno = mapper.toEntity(dto);
+        alunoService.salvar(aluno);
+        URI location = gerarHeaderLocationMatricula(aluno.getMatricula());
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping
