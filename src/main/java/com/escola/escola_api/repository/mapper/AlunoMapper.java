@@ -16,7 +16,7 @@ public abstract class AlunoMapper {
 
     @Mapping(
             target = "curso",
-            expression = "java(dto.idCurso() != null ? cursoRepository.findById(dto.idCurso()).orElseGet(() -> null) : null)"
+            expression = "java(dto.idCurso() != null ? cursoRepository.findById(dto.idCurso()).orElse(null) : null)"
     )
     public abstract Aluno toEntity(AlunoCadastroDTO dto);
 

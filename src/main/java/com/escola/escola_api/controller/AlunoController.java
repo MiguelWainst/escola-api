@@ -33,4 +33,12 @@ public class AlunoController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/{matricula}")
+    public ResponseEntity<AlunoPesquisaDTO> buscarPorId(@PathVariable Integer matricula) {
+        return alunoService.buscarPorId(matricula)
+                .map(mapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }

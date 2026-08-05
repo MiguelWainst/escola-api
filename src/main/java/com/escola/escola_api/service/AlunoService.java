@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +23,9 @@ public class AlunoService {
 
     public List<Aluno> listar() {
         return alunoRepository.findAll();
+    }
+
+    public Optional<Aluno> buscarPorId(Integer id) {
+        return alunoRepository.findByMatricula(id);
     }
 }
