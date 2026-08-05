@@ -2,6 +2,7 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.AlunoPesquisaDTO;
+import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
 import com.escola.escola_api.service.AlunoService;
 import lombok.RequiredArgsConstructor;
@@ -44,13 +45,11 @@ public class AlunoController {
     @PutMapping("/{matricula}")
     public ResponseEntity<AlunoPesquisaDTO> atualizar(@RequestBody AlunoCadastroDTO dto, @PathVariable Integer matricula) {
         return alunoService.buscarPorId(matricula)
-                .map(entity -> mapper.updateEntityFromDTO(dto, entity))
-                .map(aluno -> {
+                .map(entity -> {
+                    Aluno aluno = mapper.updateEntityFromDTO(dto, entity);
                     alunoService.atualizar(aluno);
-                    return aluno;
+                    return ResponseEntity.ok(mapper.toDTO(aluno));
                 })
-                .map(mapper::toDTO)
-                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
