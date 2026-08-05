@@ -13,6 +13,6 @@ public record CursoCadastroDTO(
         @Max(value = 1000, message = "A carga horária não pode ultrapassar 1000 horas")
         Integer cargaHoras,
         @Size(max = 1000, message = "O curso não pode ter mais de 1000 alunos")
-        List<@Min(value = 100000) @Max(value = 1) Integer> matriculaAlunos
+        List<@Min(value = 100000) @Max(value = 999999) Integer> matriculaAlunos
 ) {
 }
