@@ -6,6 +6,8 @@ import com.escola.escola_api.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AlunoService {
@@ -16,5 +18,9 @@ public class AlunoService {
     public void salvar(Aluno aluno) {
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
         alunoRepository.save(aluno);
+    }
+
+    public List<Aluno> listar() {
+        return alunoRepository.findAll();
     }
 }

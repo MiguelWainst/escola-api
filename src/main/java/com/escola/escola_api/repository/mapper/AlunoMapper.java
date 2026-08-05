@@ -1,6 +1,7 @@
 package com.escola.escola_api.repository.mapper;
 
 import com.escola.escola_api.controller.dto.AlunoCadastroDTO;
+import com.escola.escola_api.controller.dto.AlunoPesquisaDTO;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.repository.CursoRepository;
 import org.mapstruct.Mapper;
@@ -18,4 +19,6 @@ public abstract class AlunoMapper {
             expression = "java(dto.idCurso() != null ? cursoRepository.findById(dto.idCurso()).orElseGet(() -> null) : null)"
     )
     public abstract Aluno toEntity(AlunoCadastroDTO dto);
+
+    public abstract AlunoPesquisaDTO toDTO(Aluno aluno);
 }

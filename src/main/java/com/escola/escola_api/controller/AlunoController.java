@@ -1,15 +1,14 @@
 package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.AlunoCadastroDTO;
-import com.escola.escola_api.model.entity.Aluno;
+import com.escola.escola_api.controller.dto.AlunoPesquisaDTO;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
 import com.escola.escola_api.service.AlunoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
@@ -17,12 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlunoController {
 
     private final AlunoService alunoService;
-    private final AlunoMapper alunoMapper;
+    private final AlunoMapper mapper;
 
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody AlunoCadastroDTO dto) {
-        alunoService.salvar(alunoMapper.toEntity(dto));
+        alunoService.salvar(mapper.toEntity(dto));
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AlunoPesquisaDTO>> listar() {
+        List<AlunoPesquisaDTO> dtos = alunoService.listar()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
     }
 
 }
