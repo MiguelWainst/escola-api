@@ -1,6 +1,6 @@
 package com.escola.escola_api.controller;
 
-import com.escola.escola_api.controller.dto.UsuarioDTO;
+import com.escola.escola_api.controller.dto.UsuarioCadastroDTO;
 import com.escola.escola_api.repository.mapper.UsuarioMapper;
 import com.escola.escola_api.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class UsuarioController {
     private final UsuarioMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Void> cadastrarUsuario(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<Void> cadastrarUsuario(@RequestBody UsuarioCadastroDTO dto) {
         usuarioService.salvar(mapper.toEntity(dto));
         return ResponseEntity.ok().build();
     }

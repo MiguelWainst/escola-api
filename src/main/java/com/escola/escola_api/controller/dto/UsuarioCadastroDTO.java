@@ -3,7 +3,7 @@ package com.escola.escola_api.controller.dto;
 import java.util.List;
 import java.util.UUID;
 
-public record UsuarioDTO(
+public record UsuarioCadastroDTO(
     UUID id,
     String username,
     String senha,
