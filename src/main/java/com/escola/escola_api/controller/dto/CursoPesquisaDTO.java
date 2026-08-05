@@ -4,6 +4,6 @@ public record CursoPesquisaDTO(
         String id,
         String nome,
         Integer cargaHoras,
-        String UsuarioAtualizacao
+        UsuarioPesquisaDTO usuarioAtualizacao
 ) {
 }

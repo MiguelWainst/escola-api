@@ -4,14 +4,28 @@ import com.escola.escola_api.controller.dto.CursoCadastroDTO;
 import com.escola.escola_api.controller.dto.CursoPesquisaDTO;
 import com.escola.escola_api.controller.dto.CursoResumoDTO;
 import com.escola.escola_api.model.entity.Curso;
+import com.escola.escola_api.repository.UsuarioRepository;
+import com.escola.escola_api.security.SecurityService;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
-public interface CursoMapper {
+@Mapper(componentModel = "spring", uses = UsuarioMapper.class)
+public abstract class CursoMapper {
 
-    Curso toEntity(CursoCadastroDTO dto);
-    CursoPesquisaDTO toDTO(Curso curso);
-    CursoResumoDTO toResumoDTO(Curso curso);
-    void updateEntityFromDTO(CursoCadastroDTO dtoFromUser, @MappingTarget Curso entityExistente);
+    @Autowired
+    protected UsuarioRepository usuarioRepository;
+
+    @Autowired
+    protected UsuarioMapper usuarioMapper;
+
+    public abstract Curso toEntity(CursoCadastroDTO dto);
+    @Mapping(
+            target = "usuarioAtualizacao",
+            expression = "java(curso.getUsuarioAtualizacao() != null ? usuarioMapper.toDTO(usuarioRepository.findById(curso.getUsuarioAtualizacao()).orElse(null)) : null)"
+    )
+    public abstract CursoPesquisaDTO toDTO(Curso curso);
+    public abstract CursoResumoDTO toResumoDTO(Curso curso);
+    public abstract void updateEntityFromDTO(CursoCadastroDTO dtoFromUser, @MappingTarget Curso entityExistente);
 }
