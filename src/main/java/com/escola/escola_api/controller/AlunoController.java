@@ -53,4 +53,15 @@ public class AlunoController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{matricula}")
+    public ResponseEntity<?> excluir(@PathVariable Integer matricula) {
+        return alunoService.buscarPorId(matricula)
+                .map(aluno -> {
+                    alunoService.excluir(aluno);
+                    return aluno;
+                })
+                .map(aluno -> ResponseEntity.ok().build())
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
