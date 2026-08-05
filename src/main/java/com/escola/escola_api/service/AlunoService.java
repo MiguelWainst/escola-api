@@ -28,4 +28,15 @@ public class AlunoService {
     public Optional<Aluno> buscarPorId(Integer id) {
         return alunoRepository.findByMatricula(id);
     }
+
+    public void atualizar(Aluno aluno) {
+        if (aluno.getMatricula() == null) {
+            throw new IllegalArgumentException("A matrícula do aluno não pode ser nula");
+        }
+        alunoRepository.save(aluno);
+    }
+
+    public void excluir(Aluno aluno) {
+        alunoRepository.delete(aluno);
+    }
 }

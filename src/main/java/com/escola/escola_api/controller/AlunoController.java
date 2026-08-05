@@ -41,4 +41,16 @@ public class AlunoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{matricula}")
+    public ResponseEntity<AlunoPesquisaDTO> atualizar(@RequestBody AlunoCadastroDTO dto, @PathVariable Integer matricula) {
+        return alunoService.buscarPorId(matricula)
+                .map(entity -> mapper.updateEntityFromDTO(dto, entity))
+                .map(aluno -> {
+                    alunoService.atualizar(aluno);
+                    return aluno;
+                })
+                .map(mapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
