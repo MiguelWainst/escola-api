@@ -34,7 +34,7 @@ create table alunos(
 	cpf varchar(11),
 	data_matricula timestamp not null,
 	data_atualizacao timestamp,
-	usuario_atualizacao varchar(100),
+	usuario_atualizacao uuid,
 	id_curso uuid,
 
 	constraint fk_aluno_curso foreign key (id_curso) references cursos(id)
