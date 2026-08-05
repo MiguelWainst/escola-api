@@ -6,6 +6,9 @@ import com.escola.escola_api.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AlunoService {
@@ -16,5 +19,24 @@ public class AlunoService {
     public void salvar(Aluno aluno) {
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
         alunoRepository.save(aluno);
+    }
+
+    public List<Aluno> listar() {
+        return alunoRepository.findAll();
+    }
+
+    public Optional<Aluno> buscarPorId(Integer id) {
+        return alunoRepository.findByMatricula(id);
+    }
+
+    public void atualizar(Aluno aluno) {
+        if (aluno.getMatricula() == null) {
+            throw new IllegalArgumentException("A matrícula do aluno não pode ser nula");
+        }
+        alunoRepository.save(aluno);
+    }
+
+    public void excluir(Aluno aluno) {
+        alunoRepository.delete(aluno);
     }
 }

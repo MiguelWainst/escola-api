@@ -4,6 +4,7 @@ public record AlunoPesquisaDTO(
         String matricula,
         String nome,
         String email,
-        String cpf
+        String cpf,
+        CursoResumoDTO curso
 ) {
 }

@@ -5,7 +5,6 @@ import com.escola.escola_api.controller.dto.CursoPesquisaDTO;
 import com.escola.escola_api.controller.dto.CursoResumoDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.UsuarioRepository;
-import com.escola.escola_api.security.SecurityService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
