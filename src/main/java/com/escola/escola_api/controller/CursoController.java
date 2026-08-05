@@ -2,6 +2,7 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
 import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
+import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.mapper.CursoMapper;
 import com.escola.escola_api.service.CursoService;
@@ -25,11 +26,11 @@ public class CursoController implements GenericController{
     private final CursoMapper cursoMapper;
 
     @GetMapping
-    public ResponseEntity<List<CursoPesquisaDTO>> listar() {
+    public ResponseEntity<List<CursoResumoDTO>> listar() {
         List<Curso> cursos = cursoService.buscarTodos();
-        List<CursoPesquisaDTO> dtos = cursos
+        List<CursoResumoDTO> dtos = cursos
                 .stream()
-                .map(cursoMapper::toDTO)
+                .map(cursoMapper::toResumoDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
