@@ -1,6 +1,8 @@
-package com.escola.escola_api.controller.dto;
+package com.escola.escola_api.controller.dto.curso;
 
 import jakarta.validation.constraints.*;
+
+import java.util.List;
 
 public record CursoCadastroDTO(
         @NotBlank(message = "O nome não pode ser nulo.")
@@ -9,6 +11,8 @@ public record CursoCadastroDTO(
         @NotNull(message = "A carga horária é obrigatória")
         @Min(value = 1, message = "A carga horária deve ser de no mínimo 1 hora")
         @Max(value = 1000, message = "A carga horária não pode ultrapassar 1000 horas")
-        Integer cargaHoras
+        Integer cargaHoras,
+        @Size(max = 1000, message = "O curso não pode ter mais de 1000 alunos")
+        List<@Min(value = 100000) @Max(value = 1) Integer> matriculaAlunos
 ) {
 }

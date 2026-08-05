@@ -1,4 +1,6 @@
-package com.escola.escola_api.controller.dto;
+package com.escola.escola_api.controller.dto.aluno;
+
+import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
 
 public record AlunoPesquisaDTO(
         String matricula,
