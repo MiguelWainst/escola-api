@@ -1,6 +1,7 @@
 package com.escola.escola_api.service;
 
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
+import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.repository.AlunoRepository;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
@@ -29,8 +30,8 @@ public class AlunoService {
         return alunoRepository.save(aluno);
     }
 
-    public List<Aluno> listar() {
-        return alunoRepository.findAll();
+    public List<AlunoPesquisaDTO> listar() {
+        return alunoRepository.findAll().stream().map(mapper::toDTO).toList();
     }
 
     public Optional<Aluno> buscarPorId(Integer id) {

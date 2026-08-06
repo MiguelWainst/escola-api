@@ -1,17 +1,16 @@
 package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
+import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.service.AlunoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
@@ -27,14 +26,10 @@ public class AlunoController implements GenericController {
         return ResponseEntity.created(location).build();
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<AlunoPesquisaDTO>> listar() {
-//        List<AlunoPesquisaDTO> dtos = alunoService.listar()
-//                .stream()
-//                .map(mapper::toDTO)
-//                .toList();
-//        return ResponseEntity.ok(dtos);
-//    }
+    @GetMapping
+    public ResponseEntity<List<AlunoPesquisaDTO>> listar() {
+        return ResponseEntity.ok(alunoService.listar());
+    }
 //
 //    @GetMapping("/{matricula}")
 //    public ResponseEntity<AlunoPesquisaDTO> buscarPorId(@PathVariable Integer matricula) {
