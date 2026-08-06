@@ -1,7 +1,9 @@
 package com.escola.escola_api.service;
 
+import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.repository.AlunoRepository;
+import com.escola.escola_api.repository.mapper.AlunoMapper;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.validator.AlunoValidator;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +19,14 @@ public class AlunoService {
     private final AlunoRepository alunoRepository;
     private final SecurityService securityService;
     private final AlunoValidator validator;
+    private final AlunoMapper mapper;
 
-    public void salvar(Aluno aluno) {
+    public Aluno salvar(AlunoCadastroDTO dto) {
+        Aluno aluno = mapper.toEntity(dto);
+        aluno.setCpf(limparCpf(dto.cpf()));
         validator.validar(aluno);
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
-        alunoRepository.save(aluno);
+        return alunoRepository.save(aluno);
     }
 
     public List<Aluno> listar() {
@@ -43,5 +48,9 @@ public class AlunoService {
 
     public void excluir(Aluno aluno) {
         alunoRepository.delete(aluno);
+    }
+
+    private String limparCpf(String cpf) {
+        return cpf.replaceAll("[^0-9]", "");
     }
 }
