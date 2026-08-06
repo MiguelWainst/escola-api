@@ -5,6 +5,7 @@ import com.escola.escola_api.controller.dto.ErroResposta;
 import com.escola.escola_api.exception.DuplicateRegisterException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -101,6 +102,16 @@ public class GlobalExceptionHandler {
         return new ErroResposta(
                 HttpStatus.FORBIDDEN.value(),
                 "Acesso negado: Não tem permissão necessária para a ação.",
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleEntityNotFoundException(EntityNotFoundException e) {
+        return new ErroResposta(
+                HttpStatus.NOT_FOUND.value(),
+                e.getMessage(),
                 List.of()
         );
     }

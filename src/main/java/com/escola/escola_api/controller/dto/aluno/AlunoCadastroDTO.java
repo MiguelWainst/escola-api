@@ -20,6 +20,7 @@ public record AlunoCadastroDTO(
         String email,
         @Past(message = "A data de nascimento deve ser uma data passada")
         LocalDate dataNascimento,
+        @NotBlank(message = "O CPF é obrigatório")
         @CPF(message = "O CPF é inválido")
         String cpf,
         UUID idCurso
