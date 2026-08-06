@@ -55,7 +55,9 @@ public class AlunoService {
         alunoRepository.save(aluno);
     }
 
-    public void excluir(Aluno aluno) {
+    public void excluir(Integer matricula) {
+        Aluno aluno = alunoRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
         alunoRepository.delete(aluno);
     }
 

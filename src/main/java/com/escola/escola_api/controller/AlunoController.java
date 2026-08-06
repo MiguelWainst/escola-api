@@ -43,4 +43,10 @@ public class AlunoController implements GenericController {
         alunoService.atualizar(dto, matricula);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{matricula}")
+    public ResponseEntity<Void> excluir(@PathVariable Integer matricula) {
+        alunoService.excluir(matricula);
+        return ResponseEntity.noContent().build();
+    }
 }
