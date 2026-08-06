@@ -45,10 +45,11 @@ public class AlunoService {
                 .map(mapper::toDTO);
     }
 
-    public void atualizar(Aluno aluno) {
-        if (aluno.getMatricula() == null) {
-            throw new IllegalArgumentException("A matrícula do aluno não pode ser nula");
-        }
+    @Transactional
+    public void atualizar(AlunoCadastroDTO dto, Integer matricula) {
+        Aluno aluno = alunoRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
+        mapper.updateEntityFromDTO(dto, aluno);
         validator.validar(aluno);
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
         alunoRepository.save(aluno);
