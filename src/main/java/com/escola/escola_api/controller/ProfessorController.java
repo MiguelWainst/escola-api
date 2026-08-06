@@ -2,6 +2,7 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
+import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.mapper.ProfessorMapper;
 import com.escola.escola_api.service.ProfessorService;
@@ -34,11 +35,11 @@ public class ProfessorController implements GenericController{
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping
-    public ResponseEntity<List<ProfessorPesquisaDTO>> listar() {
+    public ResponseEntity<List<ProfessorResumoDTO>> listar() {
         List<Professor> entityList = professorService.obterTodos();
-        List<ProfessorPesquisaDTO> dtos = entityList
+        List<ProfessorResumoDTO> dtos = entityList
                 .stream()
-                .map(professorMapper::toDTO)
+                .map(professorMapper::toResumoDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
