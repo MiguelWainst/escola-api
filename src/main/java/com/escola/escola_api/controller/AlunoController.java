@@ -5,6 +5,7 @@ import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
 import com.escola.escola_api.service.AlunoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AlunoController implements GenericController {
     private final AlunoMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody AlunoCadastroDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody @Valid AlunoCadastroDTO dto) {
         Aluno aluno = mapper.toEntity(dto);
         alunoService.salvar(aluno);
         URI location = gerarHeaderLocationMatricula(aluno.getMatricula());
@@ -47,7 +48,7 @@ public class AlunoController implements GenericController {
     }
 
     @PutMapping("/{matricula}")
-    public ResponseEntity<AlunoPesquisaDTO> atualizar(@RequestBody AlunoCadastroDTO dto, @PathVariable Integer matricula) {
+    public ResponseEntity<AlunoPesquisaDTO> atualizar(@RequestBody @Valid AlunoCadastroDTO dto, @PathVariable Integer matricula) {
         return alunoService.buscarPorId(matricula)
                 .map(entity -> {
                     Aluno aluno = mapper.updateEntityFromDTO(dto, entity);
