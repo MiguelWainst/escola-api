@@ -19,6 +19,10 @@ public abstract class AlunoMapper {
             target = "curso",
             expression = "java(dto.idCurso() != null ? cursoRepository.findById(dto.idCurso()).orElse(null) : null)"
     )
+    @Mapping(
+            target = "cpf",
+            expression = "java(dto.cpf() != null ? dto.cpf().replaceAll(\"\\\\D\", \"\") : null)"
+    )
     public abstract Aluno toEntity(AlunoCadastroDTO dto);
     public abstract AlunoPesquisaDTO toDTO(Aluno aluno);
     public abstract Aluno updateEntityFromDTO(AlunoCadastroDTO dtoFromUser, @MappingTarget Aluno entityExistente);

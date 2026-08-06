@@ -5,12 +5,14 @@ import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
 import com.escola.escola_api.service.AlunoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/alunos")
@@ -21,7 +23,7 @@ public class AlunoController implements GenericController {
     private final AlunoMapper mapper;
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody AlunoCadastroDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody @Valid AlunoCadastroDTO dto) {
         Aluno aluno = mapper.toEntity(dto);
         alunoService.salvar(aluno);
         URI location = gerarHeaderLocationMatricula(aluno.getMatricula());
@@ -46,7 +48,7 @@ public class AlunoController implements GenericController {
     }
 
     @PutMapping("/{matricula}")
-    public ResponseEntity<AlunoPesquisaDTO> atualizar(@RequestBody AlunoCadastroDTO dto, @PathVariable Integer matricula) {
+    public ResponseEntity<AlunoPesquisaDTO> atualizar(@RequestBody @Valid AlunoCadastroDTO dto, @PathVariable Integer matricula) {
         return alunoService.buscarPorId(matricula)
                 .map(entity -> {
                     Aluno aluno = mapper.updateEntityFromDTO(dto, entity);
@@ -57,13 +59,12 @@ public class AlunoController implements GenericController {
     }
 
     @DeleteMapping("/{matricula}")
-    public ResponseEntity<?> excluir(@PathVariable Integer matricula) {
-        return alunoService.buscarPorId(matricula)
-                .map(aluno -> {
-                    alunoService.excluir(aluno);
-                    return aluno;
-                })
-                .map(aluno -> ResponseEntity.ok().build())
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Void> excluir(@PathVariable Integer matricula) {
+        Optional<Aluno> alunoOptional = alunoService.buscarPorId(matricula);
+        if (alunoOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        alunoService.excluir(alunoOptional.get());
+        return ResponseEntity.noContent().build();
     }
 }

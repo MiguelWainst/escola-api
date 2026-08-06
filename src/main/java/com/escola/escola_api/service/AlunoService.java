@@ -3,6 +3,7 @@ package com.escola.escola_api.service;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.repository.AlunoRepository;
 import com.escola.escola_api.security.SecurityService;
+import com.escola.escola_api.validator.AlunoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,10 @@ public class AlunoService {
 
     private final AlunoRepository alunoRepository;
     private final SecurityService securityService;
+    private final AlunoValidator validator;
 
     public void salvar(Aluno aluno) {
+        validator.validar(aluno);
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
         alunoRepository.save(aluno);
     }
@@ -33,6 +36,8 @@ public class AlunoService {
         if (aluno.getMatricula() == null) {
             throw new IllegalArgumentException("A matrícula do aluno não pode ser nula");
         }
+        validator.validar(aluno);
+        aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
         alunoRepository.save(aluno);
     }
 
