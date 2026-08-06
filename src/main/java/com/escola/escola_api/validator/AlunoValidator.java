@@ -23,19 +23,19 @@ public class AlunoValidator {
         }
     }
 
-    private boolean existeEmail(Aluno aluno) {
-        Optional<Aluno> optionalAluno = alunoRepository.findByEmail(aluno.getEmail());
-        if (aluno.getMatricula() == null) {
+    private boolean existeDuplicate(Optional<Aluno> optionalAluno, Integer matricula) {
+        if (matricula == null) {
             return optionalAluno.isPresent();
         }
-        return optionalAluno.filter(a -> !a.getMatricula().equals(aluno.getMatricula())).isPresent();
+        return optionalAluno.filter(a -> !a.getMatricula().equals(matricula)).isPresent();
+    }
+
+
+    private boolean existeEmail(Aluno aluno) {
+        return existeDuplicate(alunoRepository.findByEmail(aluno.getEmail()), aluno.getMatricula());
     }
 
     private boolean existeCpf(Aluno aluno) {
-        Optional<Aluno> optionalAluno = alunoRepository.findByCpf(aluno.getCpf());
-        if (aluno.getMatricula() == null) {
-            return optionalAluno.isPresent();
-        }
-        return optionalAluno.filter(a -> !a.getMatricula().equals(aluno.getMatricula())).isPresent();
+        return existeDuplicate(alunoRepository.findByCpf(aluno.getCpf()), aluno.getMatricula());
     }
 }
