@@ -109,11 +109,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErroResposta handleEntityNotFoundException(EntityNotFoundException e) {
-        return new ErroResposta(
-                HttpStatus.NOT_FOUND.value(),
-                e.getMessage(),
-                List.of()
-        );
+        return ErroResposta.notFound(e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
