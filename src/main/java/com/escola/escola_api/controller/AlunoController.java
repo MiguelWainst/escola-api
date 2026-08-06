@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/alunos")
@@ -21,7 +22,7 @@ public class AlunoController implements GenericController {
     private final AlunoMapper mapper;
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody AlunoCadastroDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody AlunoCadastroDTO dto) {
         Aluno aluno = mapper.toEntity(dto);
         alunoService.salvar(aluno);
         URI location = gerarHeaderLocationMatricula(aluno.getMatricula());
@@ -57,13 +58,12 @@ public class AlunoController implements GenericController {
     }
 
     @DeleteMapping("/{matricula}")
-    public ResponseEntity<?> excluir(@PathVariable Integer matricula) {
-        return alunoService.buscarPorId(matricula)
-                .map(aluno -> {
-                    alunoService.excluir(aluno);
-                    return aluno;
-                })
-                .map(aluno -> ResponseEntity.ok().build())
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Void> excluir(@PathVariable Integer matricula) {
+        Optional<Aluno> alunoOptional = alunoService.buscarPorId(matricula);
+        if (alunoOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        alunoService.excluir(alunoOptional.get());
+        return ResponseEntity.noContent().build();
     }
 }
