@@ -11,10 +11,6 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring", uses = {CursoMapper.class})
 public interface ProfessorMapper {
 
-    @Mapping(
-            target = "cpf",
-            expression = "java(dto.cpf() != null ? dto.cpf().replaceAll(\"\\\\D\", \"\") : null)"
-    )
     Professor toEntity(ProfessorCadastroDTO dto);
 
     @Mapping(

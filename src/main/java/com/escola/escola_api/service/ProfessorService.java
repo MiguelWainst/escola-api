@@ -1,12 +1,14 @@
 package com.escola.escola_api.service;
 
+import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.repository.ProfessorRepository;
+import com.escola.escola_api.repository.mapper.ProfessorMapper;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.validator.ProfessorValidator;
-import io.micrometer.observation.ObservationFilter;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,16 +25,22 @@ public class ProfessorService {
     private final ProfessorValidator validator;
     private final CursoRepository cursoRepository;
     private final SecurityService securityService;
+    private final ProfessorMapper mapper;
 
     @Transactional
-    public void salvar(Professor professor, List<UUID> idCursos) {
-        validator.validar(professor);
-        if (idCursos != null && !idCursos.isEmpty()) {
-            List<Curso> cursosEncontrados = cursoRepository.findAllById(idCursos);
-            professor.setCursos(cursosEncontrados);
+    public Professor salvar(ProfessorCadastroDTO dto) {
+        Professor entity = mapper.toEntity(dto);
+        entity.setCpf(limparCpf(dto.cpf()));
+        validator.validar(entity);
+        if (dto.idCurso() != null && !dto.idCurso().isEmpty()) {
+            List<Curso> cursosEncontrados = cursoRepository.findAllById(dto.idCurso());
+            if (cursosEncontrados.size() != dto.idCurso().size()){
+                throw new EntityNotFoundException("1 ou mais cursos não existem.");
+            }
+            entity.setCursos(cursosEncontrados);
         }
-        professor.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
-        professorRepository.save(professor);
+        entity.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
+        return professorRepository.save(entity);
     }
 
     public List<Professor> obterTodos() {
@@ -56,4 +64,9 @@ public class ProfessorService {
         }
         professorRepository.delete(professor);
     }
+
+    private String limparCpf(String cpf) {
+        return cpf.replaceAll("[^0-9]", "");
+    }
+
 }
