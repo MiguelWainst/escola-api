@@ -23,13 +23,11 @@ public class AlunoValidator {
         }
     }
 
-    private boolean existeDuplicate(Optional<Aluno> optionalAluno, Integer matricula) {
-        if (matricula == null) {
-            return optionalAluno.isPresent();
-        }
-        return optionalAluno.filter(a -> !a.getMatricula().equals(matricula)).isPresent();
+    private boolean existeDuplicate(Optional<Aluno> optionalAluno, Optional<Integer> matricula) {
+        return matricula
+                .map(m -> optionalAluno.filter(a -> !a.getMatricula().equals(m)).isPresent())
+                .orElse(optionalAluno.isPresent());
     }
-
 
     private boolean existeEmail(Aluno aluno) {
         return existeDuplicate(alunoRepository.findByEmail(aluno.getEmail()), aluno.getMatricula());
