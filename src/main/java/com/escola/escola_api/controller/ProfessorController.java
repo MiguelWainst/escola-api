@@ -50,6 +50,12 @@ public class ProfessorController implements GenericController{
 //            return ResponseEntity.ok(dto);
 //        }).orElseGet(() -> ResponseEntity.notFound().build());
 //    }
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
+    @GetMapping
+    public ResponseEntity<List<ProfessorResumoDTO>> listar() {
+        return ResponseEntity.ok(professorService.listar());
+    }
+
 //
 //    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
 //    @PutMapping("/{matricula}")

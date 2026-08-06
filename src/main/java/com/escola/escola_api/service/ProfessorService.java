@@ -1,6 +1,8 @@
 package com.escola.escola_api.service;
 
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
+import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
+import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.CursoRepository;
@@ -43,8 +45,11 @@ public class ProfessorService {
         return professorRepository.save(entity);
     }
 
-    public List<Professor> obterTodos() {
-        return professorRepository.findAll();
+    public List<ProfessorResumoDTO> listar() {
+        return professorRepository.findAll()
+                .stream()
+                .map(mapper::toResumoDTO)
+                .toList();
     }
 
     public Optional<Professor> obterPorMatricula(Integer matricula) {
