@@ -30,32 +30,20 @@ public class ProfessorController implements GenericController{
         return ResponseEntity.created(location).build();
     }
 
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
-//    @GetMapping
-//    public ResponseEntity<List<ProfessorResumoDTO>> listar() {
-//        List<Professor> entityList = professorService.obterTodos();
-//        List<ProfessorResumoDTO> dtos = entityList
-//                .stream()
-//                .map(professorMapper::toResumoDTO)
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok(dtos);
-//    }
-//
-//
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
-//    @GetMapping("/{matricula}")
-//    public ResponseEntity<ProfessorPesquisaDTO> obterPorMatricula(@PathVariable Integer matricula) {
-//        return professorService.obterPorMatricula(matricula).map(professor -> {
-//            ProfessorPesquisaDTO dto = professorMapper.toDTO(professor);
-//            return ResponseEntity.ok(dto);
-//        }).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping
     public ResponseEntity<List<ProfessorResumoDTO>> listar() {
         return ResponseEntity.ok(professorService.listar());
     }
 
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
+    @GetMapping("/{matricula}")
+    public ResponseEntity<ProfessorPesquisaDTO> obterPorMatricula(@PathVariable Integer matricula) {
+        return professorService.obterPorMatricula(matricula)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 //
 //    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
 //    @PutMapping("/{matricula}")

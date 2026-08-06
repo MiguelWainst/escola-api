@@ -52,8 +52,8 @@ public class ProfessorService {
                 .toList();
     }
 
-    public Optional<Professor> obterPorMatricula(Integer matricula) {
-        return professorRepository.findByMatricula(matricula);
+    public Optional<ProfessorPesquisaDTO> obterPorMatricula(Integer matricula) {
+        return professorRepository.findByMatricula(matricula).map(mapper::toDTO);
     }
 
     public void atualizar(Professor entity) {
