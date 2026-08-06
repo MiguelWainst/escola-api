@@ -30,10 +30,10 @@ public class AlunoValidator {
     }
 
     private boolean existeEmail(Aluno aluno) {
-        return existeDuplicate(alunoRepository.findByEmail(aluno.getEmail()), aluno.getMatricula());
+        return existeDuplicate(alunoRepository.findByEmail(aluno.getEmail()), Optional.ofNullable(aluno.getMatricula()));
     }
 
     private boolean existeCpf(Aluno aluno) {
-        return existeDuplicate(alunoRepository.findByCpf(aluno.getCpf()), aluno.getMatricula());
+        return existeDuplicate(alunoRepository.findByCpf(aluno.getCpf()), Optional.ofNullable(aluno.getMatricula()));
     }
 }
