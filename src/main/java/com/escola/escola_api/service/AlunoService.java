@@ -7,8 +7,10 @@ import com.escola.escola_api.repository.AlunoRepository;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.validator.AlunoValidator;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,7 @@ public class AlunoService {
     private final AlunoValidator validator;
     private final AlunoMapper mapper;
 
+    @Transactional
     public Aluno salvar(AlunoCadastroDTO dto) {
         Aluno aluno = mapper.toEntity(dto);
         aluno.setCpf(limparCpf(dto.cpf()));
@@ -31,11 +34,15 @@ public class AlunoService {
     }
 
     public List<AlunoPesquisaDTO> listar() {
-        return alunoRepository.findAll().stream().map(mapper::toDTO).toList();
+        return alunoRepository.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
-    public Optional<Aluno> buscarPorId(Integer id) {
-        return alunoRepository.findByMatricula(id);
+    public Optional<AlunoPesquisaDTO> buscarPorMatricula(Integer matricula) {
+        return alunoRepository.findByMatricula(matricula)
+                .map(mapper::toDTO);
     }
 
     public void atualizar(Aluno aluno) {

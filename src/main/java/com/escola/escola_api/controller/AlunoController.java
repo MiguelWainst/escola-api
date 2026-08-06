@@ -59,4 +59,11 @@ public class AlunoController implements GenericController {
 //        alunoService.excluir(alunoOptional.get());
 //        return ResponseEntity.noContent().build();
 //    }
+
+    @GetMapping("/{matricula}")
+    public ResponseEntity<AlunoPesquisaDTO> buscarPorId(@PathVariable Integer matricula) {
+        return alunoService.buscarPorMatricula(matricula)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

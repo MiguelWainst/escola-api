@@ -21,5 +21,5 @@ public abstract class AlunoMapper {
     )
     public abstract Aluno toEntity(AlunoCadastroDTO dto);
     public abstract AlunoPesquisaDTO toDTO(Aluno aluno);
-    public abstract Aluno updateEntityFromDTO(AlunoCadastroDTO dtoFromUser, @MappingTarget Aluno entityExistente);
+    public abstract void updateEntityFromDTO(AlunoCadastroDTO dtoFromUser, @MappingTarget Aluno entityExistente);
 }
