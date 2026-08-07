@@ -52,14 +52,15 @@ public class ProfessorService {
                 .toList();
     }
 
-    public Optional<ProfessorPesquisaDTO> obterPorMatricula(Integer matricula) {
-        return professorRepository.findByMatricula(matricula).map(mapper::toDTO);
+    public ProfessorPesquisaDTO obterPorMatricula(Integer matricula) {
+        return professorRepository.findByMatricula(matricula).map(mapper::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
     }
 
     @Transactional
     public void atualizar(Integer matricula, ProfessorCadastroDTO dto) {
         Professor entity = professorRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
         mapper.updateEntityFromDTO(dto, entity);
         validator.validar(entity);
         entity.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());

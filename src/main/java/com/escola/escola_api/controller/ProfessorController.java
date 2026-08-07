@@ -40,9 +40,7 @@ public class ProfessorController implements GenericController{
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping("/{matricula}")
     public ResponseEntity<ProfessorPesquisaDTO> obterPorMatricula(@PathVariable Integer matricula) {
-        return professorService.obterPorMatricula(matricula)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(professorService.obterPorMatricula(matricula));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
