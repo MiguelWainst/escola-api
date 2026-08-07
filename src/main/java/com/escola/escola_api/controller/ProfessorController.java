@@ -44,16 +44,13 @@ public class ProfessorController implements GenericController{
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-//
-//    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
-//    @PutMapping("/{matricula}")
-//    public ResponseEntity<?> atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorCadastroDTO dto) {
-//        return professorService.obterPorMatricula(matricula).map(professor -> {
-//            professorMapper.updateEntityFromDTO(dto, professor);
-//            professorService.atualizar(professor);
-//            return ResponseEntity.noContent().build();
-//        }).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PutMapping("/{matricula}")
+    public ResponseEntity<?> atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorCadastroDTO dto) {
+        professorService.atualizar(matricula, dto);
+        return ResponseEntity.noContent().build();
+    }
 //
 //    @PreAuthorize("hasAnyRole('ADMIN')")
 //    @DeleteMapping("/{matricula}")

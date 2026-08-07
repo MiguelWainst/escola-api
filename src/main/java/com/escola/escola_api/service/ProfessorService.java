@@ -56,10 +56,12 @@ public class ProfessorService {
         return professorRepository.findByMatricula(matricula).map(mapper::toDTO);
     }
 
-    public void atualizar(Professor entity) {
-        if (entity.getMatricula() == null) {
-            throw new IllegalArgumentException("A matrícula do professor não pode ser nula");
-        }
+    public void atualizar(Integer matricula, ProfessorCadastroDTO dto) {
+        Professor entity = professorRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
+        validator.validar(entity);
+        mapper.updateEntityFromDTO(dto, entity);
+        entity.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
         professorRepository.save(entity);
     }
 
