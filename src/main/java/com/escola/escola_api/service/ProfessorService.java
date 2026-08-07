@@ -65,11 +65,10 @@ public class ProfessorService {
         entity.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
     }
 
-    public void deletar(Professor professor) {
-        if (professor == null) {
-            throw new IllegalArgumentException("O professor não pode ser nulo");
-        }
-        professorRepository.delete(professor);
+    public void deletar(Integer matricula) {
+        Professor entity = professorRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
+        professorRepository.delete(entity);
     }
 
     private String limparCpf(String cpf) {

@@ -51,14 +51,12 @@ public class ProfessorController implements GenericController{
         professorService.atualizar(matricula, dto);
         return ResponseEntity.noContent().build();
     }
-//
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-//    @DeleteMapping("/{matricula}")
-//    public ResponseEntity<?> deletar(@PathVariable Integer matricula) {
-//        return professorService.obterPorMatricula(matricula).map(professor -> {
-//            professorService.deletar(professor);
-//            return ResponseEntity.noContent().build();
-//        }).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping("/{matricula}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer matricula) {
+        professorService.deletar(matricula);
+        return ResponseEntity.noContent().build();
+    }
 
 }
