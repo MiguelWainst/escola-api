@@ -8,16 +8,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {CursoMapper.class})
+@Mapper(componentModel = "spring")
 public interface ProfessorMapper {
 
+    @Mapping(target = "cursos", ignore = true)
     Professor toEntity(ProfessorCadastroDTO dto);
-
     @Mapping(
             target = "cursos",
             expression = "java(professor.getCursos() != null ? professor.getCursos().stream().map(Curso::getId).toList() : null)"
     )
     ProfessorResumoDTO toResumoDTO(Professor professor);
     ProfessorPesquisaDTO toDTO(Professor professor);
+    @Mapping(target = "cursos", ignore = true)
     void updateEntityFromDTO(ProfessorCadastroDTO dtoFromUser, @MappingTarget Professor entityExistente);
 }

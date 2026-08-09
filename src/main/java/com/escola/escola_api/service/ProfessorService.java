@@ -3,6 +3,7 @@ package com.escola.escola_api.service;
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
+import com.escola.escola_api.exception.CursoJaVinculadoException;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.CursoRepository;
@@ -60,6 +61,15 @@ public class ProfessorService {
         Professor entity = professorRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
         mapper.updateEntityFromDTO(dto, entity);
+        entity.setCpf(limparCpf(dto.cpf()));
+        if (dto.idCurso() != null && !dto.idCurso().isEmpty()) {
+            List<Curso> cursos = cursoRepository.findAllById(dto.idCurso());
+            if (cursos.size() != dto.idCurso().size())
+                throw new EntityNotFoundException("Uma ou mais cursos não foram encontrados!");
+            if (cursos.stream().anyMatch(curso -> entity.getCursos().stream().anyMatch(cursoExistente -> cursoExistente.getId().equals(curso.getId()))))
+                throw new CursoJaVinculadoException("Professor já está vinculado a um ou mais cursos enviados.");
+            entity.getCursos().addAll(cursos);
+        }
         validator.validar(entity);
         entity.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
     }
