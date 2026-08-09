@@ -32,10 +32,8 @@ public class AlunoController implements GenericController {
     }
 
     @GetMapping("/{matricula}")
-    public ResponseEntity<AlunoPesquisaDTO> buscarPorId(@PathVariable Integer matricula) {
-        return alunoService.buscarPorMatricula(matricula)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<AlunoPesquisaDTO> buscarPorMatricula(@PathVariable Integer matricula) {
+        return ResponseEntity.ok(alunoService.buscarPorMatricula(matricula));
     }
 
     @PutMapping("/{matricula}")

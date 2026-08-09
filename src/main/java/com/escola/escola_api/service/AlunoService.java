@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +39,9 @@ public class AlunoService {
                 .toList();
     }
 
-    public Optional<AlunoPesquisaDTO> buscarPorMatricula(Integer matricula) {
+    public AlunoPesquisaDTO buscarPorMatricula(Integer matricula) {
         return alunoRepository.findByMatricula(matricula)
-                .map(mapper::toDTO);
+                .map(mapper::toDTO).orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado."));
     }
 
     @Transactional
