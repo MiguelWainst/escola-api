@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +79,14 @@ public class ProfessorService {
         Professor entity = professorRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
         professorRepository.delete(entity);
+    }
+
+    @Transactional
+    public void desvincularCurso(Integer matricula, UUID idCurso) {
+        Professor professor = professorRepository.findByMatricula(matricula)
+                .orElseThrow(() ->new EntityNotFoundException("Professor não encontrado."));
+        boolean removido = professor.getCursos().removeIf(curso -> curso.getId().equals(idCurso));
+        if (!removido) throw new EntityNotFoundException("Curso não encontrado na lista do professor.");
     }
 
     private String limparCpf(String cpf) {

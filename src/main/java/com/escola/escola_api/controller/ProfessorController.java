@@ -7,12 +7,14 @@ import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.service.ProfessorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/professores")
@@ -56,4 +58,9 @@ public class ProfessorController implements GenericController{
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{matricula}/cursos/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desvincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
+        professorService.desvincularCurso(matricula, id);
+    }
 }
