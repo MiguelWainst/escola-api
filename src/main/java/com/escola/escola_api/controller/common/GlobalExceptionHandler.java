@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
@@ -119,6 +120,21 @@ public class GlobalExceptionHandler {
         return new ErroResposta(
                 HttpStatus.CONFLICT.value(),
                 e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroResposta handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        String mensagem = String.format(
+                "O parâmetro '%s' deve ser do tipo '%s'.",
+                e.getName(),
+                e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "válido"
+        );
+        return new ErroResposta(
+                HttpStatus.CONFLICT.value(),
+                mensagem,
                 List.of()
         );
     }
