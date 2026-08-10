@@ -15,9 +15,9 @@ public abstract class CursoMapper {
     public abstract Curso toEntity(CursoCadastroDTO dto);
     @Mapping(
             target = "matriculaAlunos",
-            expression = "java(curso.getAlunos() != null ? curso.getAlunos().stream().map(aluno -> aluno.getMatricula()).toList() : null)"
+            expression = "java(curso.getAlunos() != null ? curso.getAlunos().stream().map(Aluno::getMatricula).toList() : null)"
     )
-    public abstract CursoPesquisaDTO toDTO(Curso curso);
+    public abstract CursoPesquisaDTO toPesquisaDTO(Curso curso);
     public abstract CursoResumoDTO toResumoDTO(Curso curso);
     public abstract void updateEntityFromDTO(CursoCadastroDTO dtoFromUser, @MappingTarget Curso entityExistente);
 }
