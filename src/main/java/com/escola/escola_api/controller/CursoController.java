@@ -38,10 +38,8 @@ public class CursoController implements GenericController{
     @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
     @PostMapping
     public ResponseEntity<Void> salvar(@RequestBody @Valid CursoCadastroDTO dto) {
-        Curso entity = cursoMapper.toEntity(dto);
-        cursoService.salvar(entity);
-        URI location = gerarHeaderLocation(entity.getId());
-        return ResponseEntity.created(location).build();
+        Curso curso = cursoService.salvar(dto);
+        return ResponseEntity.created(gerarHeaderLocation(curso.getId())).build();
     }
 
     @GetMapping("/{id}")
