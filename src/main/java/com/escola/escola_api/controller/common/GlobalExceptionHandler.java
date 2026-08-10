@@ -2,6 +2,7 @@ package com.escola.escola_api.controller.common;
 
 import com.escola.escola_api.controller.dto.ErroCampo;
 import com.escola.escola_api.controller.dto.ErroResposta;
+import com.escola.escola_api.exception.AlunoComCursoException;
 import com.escola.escola_api.exception.CursoJaVinculadoException;
 import com.escola.escola_api.exception.DuplicateRegisterException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -135,6 +136,16 @@ public class GlobalExceptionHandler {
         return new ErroResposta(
                 HttpStatus.CONFLICT.value(),
                 mensagem,
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(AlunoComCursoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleAlunoComCursoException(AlunoComCursoException e) {
+        return new ErroResposta(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
                 List.of()
         );
     }
