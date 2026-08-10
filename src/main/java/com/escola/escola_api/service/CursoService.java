@@ -25,7 +25,6 @@ import java.util.UUID;
 public class CursoService {
 
     private final CursoRepository cursoRepository;
-    private final AlunoRepository alunoRepository;
     private final CursoValidator validator;
     private final SecurityService securityService;
     private final CursoMapper mapper;
