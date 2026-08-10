@@ -28,6 +28,10 @@ public class AlunoService {
     @Transactional
     public Aluno salvar(AlunoCadastroDTO dto) {
         Aluno aluno = mapper.toEntity(dto);
+        if (dto.idCurso() != null) {
+            aluno.setCurso(cursoRepository.findById(dto.idCurso())
+                    .orElseThrow(() -> new EntityNotFoundException("Curso não econtrado.")));
+        }
         aluno.setCpf(limparCpf(dto.cpf()));
         validator.validar(aluno);
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
@@ -60,6 +64,7 @@ public class AlunoService {
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
     }
 
+    @Transactional
     public void excluir(Integer matricula) {
         Aluno aluno = alunoRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
