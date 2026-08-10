@@ -35,17 +35,7 @@ public class CursoService {
         Curso curso = mapper.toEntity(dto);
         validator.validar(curso);
         curso.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
-        Curso save = cursoRepository.save(curso);
-        if (dto.matriculaAlunos() != null && !dto.matriculaAlunos().isEmpty()) {
-            List<Aluno> possiveisAlunos = alunoRepository.findAllById(dto.matriculaAlunos());
-            if (possiveisAlunos.size() != dto.matriculaAlunos().size())
-                throw new EntityNotFoundException("Um ou mais alunos não existem");
-            if (possiveisAlunos.stream().anyMatch(aluno -> aluno.getCurso() != null))
-                throw new AlunoComCursoException("Um ou mais alunos já estão matriculados em um curso.");
-            curso.setAlunos(possiveisAlunos);
-            possiveisAlunos.forEach(aluno -> aluno.setCurso(curso));
-        }
-        return save;
+        return cursoRepository.save(curso);
     }
 
     public List<CursoResumoDTO> buscarTodos() {
@@ -58,13 +48,21 @@ public class CursoService {
                 .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
     }
 
-    public void atualizar(Curso curso) {
-        validator.validar(curso);
-        curso.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
-        cursoRepository.save(curso);
+    @Transactional
+    public void atualizar(UUID id, CursoCadastroDTO dto) {
+        Curso cursoDoBanco = cursoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
+        mapper.updateEntityFromDTO(dto, cursoDoBanco);
+        cursoDoBanco.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
+        validator.validar(cursoDoBanco);
     }
 
     public void delete(Curso curso) {
         cursoRepository.delete(curso);
     }
+
+    private String limparCpf(String cpf) {
+        return cpf.replaceAll("[^0-9]", "");
+    }
+
 }

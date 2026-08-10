@@ -7,6 +7,7 @@ import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.service.CursoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,19 +39,12 @@ public class CursoController implements GenericController{
         return ResponseEntity.ok(cursoService.buscarPorId(id));
     }
 
-//    @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Object> atualizar(
-//            @PathVariable String id, @RequestBody @Valid CursoCadastroDTO dto
-//    ) {
-//        return cursoService.buscarPorId(UUID.fromString(id))
-//                .map(cursoFound -> {
-//                    cursoMapper.updateEntityFromDTO(dto, cursoFound);
-//                    cursoService.atualizar(cursoFound);
-//                    return ResponseEntity.ok().build();
-//                })
-//                .orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizar(@PathVariable UUID id, @RequestBody @Valid CursoCadastroDTO dto) {
+        cursoService.atualizar(id, dto);
+    }
 //
 //    @PreAuthorize("hasRole('ADMIN')")
 //    @DeleteMapping("/{id}")
