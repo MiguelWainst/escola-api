@@ -37,8 +37,8 @@ public class AlunoController implements GenericController {
     }
 
     @PutMapping("/{matricula}")
-    public ResponseEntity<Void> atualizar(@RequestBody @Valid AlunoCadastroDTO dto, @PathVariable Integer matricula) {
-        alunoService.atualizar(dto, matricula);
+    public ResponseEntity<Void> atualizar(@PathVariable Integer matricula, @RequestBody @Valid AlunoCadastroDTO dto) {
+        alunoService.atualizar(matricula, dto);
         return ResponseEntity.noContent().build();
     }
 
