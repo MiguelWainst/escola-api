@@ -32,9 +32,9 @@ public class Curso {
 
     private UUID usuarioAtualizacao;
 
-    @ManyToMany(mappedBy = "cursos")
+    @ManyToMany(mappedBy = "cursos", fetch = FetchType.LAZY)
     private List<Professor> professores;
 
     @OneToMany(mappedBy = "curso")
-    List<Aluno> alunos;
+    private List<Aluno> alunos;
 }
