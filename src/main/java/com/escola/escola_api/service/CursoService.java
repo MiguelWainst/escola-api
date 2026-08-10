@@ -1,6 +1,8 @@
 package com.escola.escola_api.service;
 
 import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
+import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
+import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
 import com.escola.escola_api.exception.AlunoComCursoException;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.model.entity.Curso;
@@ -46,8 +48,8 @@ public class CursoService {
         return save;
     }
 
-    public List<Curso> buscarTodos() {
-        return cursoRepository.findAll();
+    public List<CursoResumoDTO> buscarTodos() {
+        return cursoRepository.findAll().stream().map(mapper::toResumoDTO).toList();
     }
 
     public Optional<Curso> buscarPorId(UUID id) {

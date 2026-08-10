@@ -27,12 +27,7 @@ public class CursoController implements GenericController{
 
     @GetMapping
     public ResponseEntity<List<CursoResumoDTO>> listar() {
-        List<Curso> cursos = cursoService.buscarTodos();
-        List<CursoResumoDTO> dtos = cursos
-                .stream()
-                .map(cursoMapper::toResumoDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(cursoService.buscarTodos());
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
