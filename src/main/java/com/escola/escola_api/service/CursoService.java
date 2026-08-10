@@ -3,10 +3,8 @@ package com.escola.escola_api.service;
 import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
 import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
 import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
-import com.escola.escola_api.exception.AlunoComCursoException;
-import com.escola.escola_api.model.entity.Aluno;
+import com.escola.escola_api.exception.CursoComVinculoException;
 import com.escola.escola_api.model.entity.Curso;
-import com.escola.escola_api.repository.AlunoRepository;
 import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.repository.mapper.CursoMapper;
 import com.escola.escola_api.security.SecurityService;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -56,12 +53,14 @@ public class CursoService {
         validator.validar(cursoDoBanco);
     }
 
-    public void delete(Curso curso) {
+    @Transactional
+    public void deletar(UUID id) {
+        Curso curso = cursoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
+        if (!curso.getAlunos().isEmpty() || !curso.getProfessores().isEmpty()) {
+            throw new CursoComVinculoException("Este curso possuí 1 ou mais professores/alunos cadastrados! " +
+                    "Remova-os para prosseguir.");
+        }
         cursoRepository.delete(curso);
     }
-
-    private String limparCpf(String cpf) {
-        return cpf.replaceAll("[^0-9]", "");
-    }
-
 }

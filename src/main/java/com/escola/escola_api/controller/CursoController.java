@@ -45,15 +45,11 @@ public class CursoController implements GenericController{
     public void atualizar(@PathVariable UUID id, @RequestBody @Valid CursoCadastroDTO dto) {
         cursoService.atualizar(id, dto);
     }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Object> deletar(@PathVariable String id) {
-//        return cursoService.buscarPorId(UUID.fromString(id))
-//                .map(curso -> {
-//                    cursoService.delete(curso);
-//                    return ResponseEntity.noContent().build();
-//                })
-//                .orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable UUID id) {
+        cursoService.deletar(id);
+    }
 }
