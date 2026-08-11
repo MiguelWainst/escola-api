@@ -2,6 +2,7 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
+import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.service.AlunoService;
 import jakarta.validation.Valid;
@@ -29,9 +30,15 @@ public class AlunoController implements GenericController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<AlunoPesquisaDTO>> listar() {
-        return ResponseEntity.ok(alunoService.listar());
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/listar/admin")
+    public ResponseEntity<List<AlunoPesquisaDTO>> listarAdmin() {
+        return ResponseEntity.ok(alunoService.listarAdmin());
+    }
+
+    @GetMapping("/listar/resumo")
+    public ResponseEntity<List<AlunoResumoDTO>> listarResumo() {
+        return ResponseEntity.ok(alunoService.listarResumo());
     }
 
     @GetMapping("/{matricula}")
@@ -54,14 +61,14 @@ public class AlunoController implements GenericController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{matricula}/curso")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desvincularAluno(@PathVariable Integer matricula) {
+    public void desvincularCurso(@PathVariable Integer matricula) {
         alunoService.desvincular(matricula);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{matricula}/curso/{idCurso}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void vincularAluno(@PathVariable Integer matricula, @PathVariable UUID idCurso) {
+    public void vincularCurso(@PathVariable Integer matricula, @PathVariable UUID idCurso) {
         alunoService.vincular(matricula, idCurso);
     }
 }
