@@ -12,3 +12,8 @@ spring:
       ddl-auto: none
     properties:
       hibernate.format_sql: true
+
+regras-negocio:
+  max-alunos-por-curso: 100
+  max-cursos-por-professor: 5
+  max-professores-por-curso: 5
