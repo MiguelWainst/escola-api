@@ -59,9 +59,14 @@ public class AlunoService {
                 .toList();
     }
 
-    public AlunoPesquisaDTO buscarPorMatricula(Integer matricula) {
+    public AlunoPesquisaDTO buscarPorMatriculaAdmin(Integer matricula) {
         return alunoRepository.findByMatricula(matricula)
                 .map(mapper::toDTO).orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado."));
+    }
+
+    public AlunoResumoDTO buscarPorMatriculaPublico(Integer matricula) {
+        return alunoRepository.findByMatricula(matricula)
+                .map(mapper::toResumoDTO).orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado."));
     }
 
     @Transactional
