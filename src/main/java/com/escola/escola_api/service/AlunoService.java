@@ -92,6 +92,7 @@ public class AlunoService {
         Curso cursoEncontrado = cursoRepository.findById(curso).orElseThrow(() -> new EntityNotFoundException("Curso não encontrado!"));
         if (cursoEncontrado.getAlunos().size() < 1000) {
             aluno.setCurso(cursoEncontrado);
+            return;
         }
         throw new CursoLotadoException();
     }

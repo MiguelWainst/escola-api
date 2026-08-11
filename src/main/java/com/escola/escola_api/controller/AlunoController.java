@@ -59,9 +59,9 @@ public class AlunoController implements GenericController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/{matricula}/curso")
+    @PostMapping("/{matricula}/curso/{idCurso}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void vincularAluno(@PathVariable Integer matricula, @RequestParam UUID idCurso) {
+    public void vincularAluno(@PathVariable Integer matricula, @PathVariable UUID idCurso) {
         alunoService.vincular(matricula, idCurso);
     }
 }
