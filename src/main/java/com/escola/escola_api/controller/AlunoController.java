@@ -41,6 +41,7 @@ public class AlunoController implements GenericController {
         return ResponseEntity.ok(alunoService.listarResumo());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/{matricula}")
     @ResponseStatus(HttpStatus.OK)
     public AlunoPesquisaDTO buscarPorMatriculaAdmin(@PathVariable Integer matricula) {
