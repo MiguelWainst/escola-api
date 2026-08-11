@@ -1,12 +1,15 @@
 package com.escola.escola_api.service;
 
+import com.escola.escola_api.controller.dto.usuario.UsuarioCadastroDTO;
 import com.escola.escola_api.model.entity.Usuario;
 import com.escola.escola_api.repository.UsuarioRepository;
+import com.escola.escola_api.repository.mapper.UsuarioMapper;
 import com.escola.escola_api.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,11 +19,14 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioValidator validator;
+    private final UsuarioMapper mapper;
 
-    public void salvar(Usuario usuario) {
+    public Usuario salvar(UsuarioCadastroDTO dto) {
+        Usuario usuario = mapper.toEntity(dto);
         validator.validar(usuario);
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        usuarioRepository.save(usuario);
+        usuario.setRoles(List.of("GUEST"));
+        return usuarioRepository.save(usuario);
     }
 
     public Optional<Usuario> obterPorEmail(String email) {
