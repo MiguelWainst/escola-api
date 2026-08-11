@@ -63,4 +63,10 @@ public class ProfessorController implements GenericController{
     public void desvincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
         professorService.desvincularCurso(matricula, id);
     }
+
+    @PostMapping("/{matricula}/cursos/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void vincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
+        professorService.vincularCurso(matricula, id);
+    }
 }

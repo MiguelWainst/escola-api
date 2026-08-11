@@ -4,6 +4,8 @@ import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
 import com.escola.escola_api.exception.CursoJaVinculadoException;
+import com.escola.escola_api.exception.CursoLotadoException;
+import com.escola.escola_api.exception.ProfessorLotadoException;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.CursoRepository;
@@ -87,6 +89,20 @@ public class ProfessorService {
                 .orElseThrow(() ->new EntityNotFoundException("Professor não encontrado."));
         boolean removido = professor.getCursos().removeIf(curso -> curso.getId().equals(idCurso));
         if (!removido) throw new EntityNotFoundException("Curso não encontrado na lista do professor.");
+    }
+
+    @Transactional
+    public void vincularCurso(Integer matricula, UUID idCurso) {
+        Professor professor = professorRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
+        Curso curso = cursoRepository.findById(idCurso).orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
+        if (curso.getProfessores().size() >= 5)
+            throw new CursoLotadoException("O curso já atingiu a capacidade máxima de professores.");
+        if (professor.getCursos().size() >=5)
+            throw new ProfessorLotadoException();
+        if (professor.getCursos().contains(curso))
+            throw new CursoJaVinculadoException("Professor já está vinculado a este curso.");
+        professor.getCursos().add(curso);
     }
 
     private String limparCpf(String cpf) {
