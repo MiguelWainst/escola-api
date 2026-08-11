@@ -1,5 +1,6 @@
 package com.escola.escola_api.service;
 
+import com.escola.escola_api.configuration.RegraNegocioProperties;
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
@@ -29,6 +30,7 @@ public class AlunoService {
     private final SecurityService securityService;
     private final AlunoValidator validator;
     private final AlunoMapper mapper;
+    private final RegraNegocioProperties regras;
 
     @Transactional
     public Aluno salvar(AlunoCadastroDTO dto) {
@@ -98,7 +100,7 @@ public class AlunoService {
             throw new AlunoComCursoException("Este aluno já está vinculado a um curso!");
         }
         Curso cursoEncontrado = cursoRepository.findById(curso).orElseThrow(() -> new EntityNotFoundException("Curso não encontrado!"));
-        if (cursoEncontrado.getAlunos().size() < 1000) {
+        if (cursoEncontrado.getAlunos().size() < regras.getMaxAlunosPorCurso()) {
             aluno.setCurso(cursoEncontrado);
             return;
         }
