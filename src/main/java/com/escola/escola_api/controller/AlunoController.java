@@ -31,19 +31,26 @@ public class AlunoController implements GenericController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/listar/admin")
+    @GetMapping("/admin/listar")
     public ResponseEntity<List<AlunoPesquisaDTO>> listarAdmin() {
         return ResponseEntity.ok(alunoService.listarAdmin());
     }
 
-    @GetMapping("/listar/resumo")
+    @GetMapping("/publico/listar")
     public ResponseEntity<List<AlunoResumoDTO>> listarResumo() {
         return ResponseEntity.ok(alunoService.listarResumo());
     }
 
-    @GetMapping("/{matricula}")
-    public ResponseEntity<AlunoPesquisaDTO> buscarPorMatricula(@PathVariable Integer matricula) {
-        return ResponseEntity.ok(alunoService.buscarPorMatricula(matricula));
+    @GetMapping("/admin/{matricula}")
+    @ResponseStatus(HttpStatus.OK)
+    public AlunoPesquisaDTO buscarPorMatriculaAdmin(@PathVariable Integer matricula) {
+        return alunoService.buscarPorMatriculaAdmin(matricula);
+    }
+
+    @GetMapping("/publico/{matricula}")
+    @ResponseStatus(HttpStatus.OK)
+    public AlunoResumoDTO buscarPorMatriculaPublico(@PathVariable Integer matricula) {
+        return alunoService.buscarPorMatriculaPublico(matricula);
     }
 
     @PutMapping("/{matricula}")
