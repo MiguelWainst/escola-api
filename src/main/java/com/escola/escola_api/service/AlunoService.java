@@ -71,6 +71,13 @@ public class AlunoService {
         alunoRepository.delete(aluno);
     }
 
+    @Transactional
+    public void desvincular(Integer matricula) {
+        Aluno aluno = alunoRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
+        aluno.setCurso(null);
+    }
+
     private String limparCpf(String cpf) {
         return cpf.replaceAll("[^0-9]", "");
     }
