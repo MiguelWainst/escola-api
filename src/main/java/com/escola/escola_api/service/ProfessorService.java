@@ -1,5 +1,6 @@
 package com.escola.escola_api.service;
 
+import com.escola.escola_api.configuration.RegraNegocioProperties;
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
@@ -30,6 +31,8 @@ public class ProfessorService {
     private final CursoRepository cursoRepository;
     private final SecurityService securityService;
     private final ProfessorMapper mapper;
+    private final RegraNegocioProperties regras;
+
 
     @Transactional
     public Professor salvar(ProfessorCadastroDTO dto) {
@@ -96,12 +99,12 @@ public class ProfessorService {
         Professor professor = professorRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
         Curso curso = cursoRepository.findById(idCurso).orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
-        if (curso.getProfessores().size() >= 5)
-            throw new CursoLotadoException("O curso já atingiu a capacidade máxima de professores.");
-        if (professor.getCursos().size() >=5)
-            throw new ProfessorLotadoException();
         if (professor.getCursos().contains(curso))
             throw new CursoJaVinculadoException("Professor já está vinculado a este curso.");
+        if (curso.getProfessores().size() >= regras.getMaxProfessoresPorCurso())
+            throw new CursoLotadoException("O curso já atingiu a capacidade máxima de professores.");
+        if (professor.getCursos().size() >= regras.getMaxCursosPorProfessor())
+            throw new ProfessorLotadoException();
         professor.getCursos().add(curso);
     }
 
