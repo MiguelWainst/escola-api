@@ -16,8 +16,8 @@ public class RegraNegocioProperties {
     private int maxAlunosPorCurso;
 
     @Min(1)
-    private int maxCursoPorProfessor;
+    private int maxCursosPorProfessor;
 
     @Min(1)
-    private int maxProfessorPorCurso;
+    private int maxProfessoresPorCurso;
 }
