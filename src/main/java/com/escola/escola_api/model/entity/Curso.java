@@ -1,7 +1,8 @@
 package com.escola.escola_api.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,7 +13,12 @@ import java.util.UUID;
 
 @Table(name = "cursos")
 @Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = {"professores", "alunos"})
+@ToString(exclude = {"professores", "alunos"})
+@NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Curso {
 

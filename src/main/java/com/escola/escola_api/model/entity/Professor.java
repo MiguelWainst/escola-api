@@ -1,9 +1,7 @@
 package com.escola.escola_api.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,7 +16,10 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@EqualsAndHashCode(exclude = "cursos")
+@ToString(exclude = "cursos")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Professor {
 
     @Id
