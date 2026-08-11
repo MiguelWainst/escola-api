@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/alunos")
@@ -55,5 +56,12 @@ public class AlunoController implements GenericController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desvincularAluno(@PathVariable Integer matricula) {
         alunoService.desvincular(matricula);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{matricula}/curso")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void vincularAluno(@PathVariable Integer matricula, @RequestParam UUID idCurso) {
+        alunoService.vincular(matricula, idCurso);
     }
 }

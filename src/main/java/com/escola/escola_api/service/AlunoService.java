@@ -2,7 +2,10 @@ package com.escola.escola_api.service;
 
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
+import com.escola.escola_api.exception.AlunoComCursoException;
+import com.escola.escola_api.exception.CursoLotadoException;
 import com.escola.escola_api.model.entity.Aluno;
+import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.AlunoRepository;
 import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +80,20 @@ public class AlunoService {
         Aluno aluno = alunoRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
         aluno.setCurso(null);
+    }
+
+    @Transactional
+    public void vincular(Integer matricula, UUID curso) {
+        Aluno aluno = alunoRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
+        if (aluno.getCurso() != null) {
+            throw new AlunoComCursoException("Este aluno já está vinculado a um curso!");
+        }
+        Curso cursoEncontrado = cursoRepository.findById(curso).orElseThrow(() -> new EntityNotFoundException("Curso não encontrado!"));
+        if (cursoEncontrado.getAlunos().size() < 1000) {
+            aluno.setCurso(cursoEncontrado);
+        }
+        throw new CursoLotadoException();
     }
 
     private String limparCpf(String cpf) {
