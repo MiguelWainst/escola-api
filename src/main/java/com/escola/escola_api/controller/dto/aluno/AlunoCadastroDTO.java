@@ -1,11 +1,7 @@
 package com.escola.escola_api.controller.dto.aluno;
 
 import com.escola.escola_api.validator.DominioEmailValido;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.br.CPF;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -21,7 +17,9 @@ public record AlunoCadastroDTO(
         @Past(message = "A data de nascimento deve ser uma data passada")
         LocalDate dataNascimento,
         @NotBlank(message = "O CPF é obrigatório")
-        @CPF(message = "O CPF é inválido")
+        @Min(value = 11, message = "CPF deve ter no mínimo 11 dígitos")
+        @Max(value = 14, message = "CPF não pode ter mais de 14 dígitos")
+//        @CPF(message = "O CPF é inválido")
         String cpf,
         UUID idCurso
 ) {
