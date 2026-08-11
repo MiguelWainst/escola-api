@@ -57,7 +57,7 @@ public class ProfessorController implements GenericController{
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{matricula}/cursos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desvincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
