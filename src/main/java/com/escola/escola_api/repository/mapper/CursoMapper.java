@@ -14,7 +14,7 @@ public interface CursoMapper {
     Curso toEntity(CursoCadastroDTO dto);
     @Mapping(
             target = "matriculaAlunos",
-            expression = "java(curso.getAlunos() != null ? curso.getAlunos().stream().map(Aluno::getMatricula).toList() : null)"
+            expression = "java(curso.getAlunos() != null ? curso.getAlunos().stream().map(aluno -> aluno.getMatricula()).toList() : null)"
     )
     CursoPesquisaDTO toPesquisaDTO(Curso curso);
     CursoResumoDTO toResumoDTO(Curso curso);
