@@ -2,10 +2,7 @@ package com.escola.escola_api.controller.common;
 
 import com.escola.escola_api.controller.dto.ErroCampo;
 import com.escola.escola_api.controller.dto.ErroResposta;
-import com.escola.escola_api.exception.AlunoComCursoException;
-import com.escola.escola_api.exception.CursoComVinculoException;
-import com.escola.escola_api.exception.CursoJaVinculadoException;
-import com.escola.escola_api.exception.DuplicateRegisterException;
+import com.escola.escola_api.exception.*;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.EntityNotFoundException;
@@ -156,6 +153,16 @@ public class GlobalExceptionHandler {
     public ErroResposta handleCursoComVinculoException(CursoComVinculoException e) {
         return new ErroResposta(
                 HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(CursoLotadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleCursoLotadoException(CursoLotadoException e) {
+        return new ErroResposta(
+                HttpStatus.CONTINUE.value(),
                 e.getMessage(),
                 List.of()
         );
