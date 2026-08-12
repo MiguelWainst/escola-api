@@ -107,6 +107,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(AcessoNegadoException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroResposta handleAcessoNegadoException() {
+        return new ErroResposta(
+                HttpStatus.FORBIDDEN.value(),
+                "Acesso negado: Não tem permissão necessária para a ação.",
+                List.of()
+        );
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErroResposta handleEntityNotFoundException(EntityNotFoundException e) {
