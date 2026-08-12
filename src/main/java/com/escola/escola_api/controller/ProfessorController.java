@@ -2,6 +2,7 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
+import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.service.ProfessorService;
@@ -45,7 +46,7 @@ public class ProfessorController implements GenericController{
     ) {
         boolean isAdmin = securityService.isAdmin();
         if (!isAdmin && (cpf != null || usuarioAtualizacao != null))
-            throw new AccessDeniedException("Apenas administradores podem filtrar por esses campos.");
+            throw new AcessoNegadoException("Apenas administradores podem filtrar por esses campos.");
         if (isAdmin)
             return professorService.listarAdmin(nome, matricula, cpf, usuarioAtualizacao, pageable);
         return professorService.listarPublico(nome, matricula, pageable);
