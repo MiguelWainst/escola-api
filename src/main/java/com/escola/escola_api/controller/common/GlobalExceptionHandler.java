@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,6 +100,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErroResposta handleAccessDeniedException() {
+        return new ErroResposta(
+                HttpStatus.FORBIDDEN.value(),
+                "Acesso negado: Não tem permissão necessária para a ação.",
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(AcessoNegadoException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroResposta handleAcessoNegadoException() {
         return new ErroResposta(
                 HttpStatus.FORBIDDEN.value(),
                 "Acesso negado: Não tem permissão necessária para a ação.",

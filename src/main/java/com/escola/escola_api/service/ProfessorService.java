@@ -12,11 +12,15 @@ import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.repository.ProfessorRepository;
 import com.escola.escola_api.repository.mapper.ProfessorMapper;
+import com.escola.escola_api.repository.specification.ProfessorSpec;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.validator.ProfessorValidator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,11 +54,16 @@ public class ProfessorService {
         return professorRepository.save(entity);
     }
 
-    public List<ProfessorResumoDTO> listar() {
-        return professorRepository.findAll()
-                .stream()
-                .map(mapper::toResumoDTO)
-                .toList();
+    public Page<ProfessorPesquisaDTO> listarAdmin(String nome, Integer matricula, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
+        Specification<Professor> spec = ProfessorSpec.comFiltros(nome, matricula, cpf, usuarioAtualizacao);
+        return professorRepository.findAll(spec, pageable)
+                .map(mapper::toDTO);
+    }
+
+    public Page<ProfessorResumoDTO> listarPublico(String nome, Integer matricula, Pageable pageable) {
+        Specification<Professor> spec = ProfessorSpec.comFiltros(nome, matricula, null, null);
+        return professorRepository.findAll(spec, pageable)
+                .map(mapper::toResumoDTO);
     }
 
     public ProfessorPesquisaDTO obterPorMatricula(Integer matricula) {
