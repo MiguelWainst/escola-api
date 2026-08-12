@@ -3,7 +3,7 @@ package com.escola.escola_api.service;
 import com.escola.escola_api.configuration.RegraNegocioProperties;
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
+import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.CursoJaVinculadoException;
 import com.escola.escola_api.exception.CursoLotadoException;
 import com.escola.escola_api.exception.ProfessorLotadoException;
@@ -54,17 +54,17 @@ public class ProfessorService {
         return professorRepository.save(entity);
     }
 
-    public Page<ProfessorPesquisaDTO> listarAdmin(String nome, Integer matricula, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
-        Specification<Professor> spec = ProfessorSpec.comFiltros(nome, matricula, cpf, usuarioAtualizacao);
-        return professorRepository.findAll(spec, pageable)
-                .map(mapper::toDTO);
+    public Page<?> listar(String nome, Integer matricula, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
+        boolean isAdmin = securityService.isAdmin();
+        if (!isAdmin && (cpf != null || usuarioAtualizacao != null))
+            throw new AcessoNegadoException("Apenas administradores podem filtrar por esses campos.");
+        Specification<Professor> spec = isAdmin
+                ? ProfessorSpec.comFiltros(nome, matricula, cpf, usuarioAtualizacao)
+                : ProfessorSpec.comFiltros(nome, matricula, null, null);
+        Page<Professor> resultado = professorRepository.findAll(spec, pageable);
+        return isAdmin? resultado.map(mapper::toDTO) : resultado.map(mapper::toResumoDTO);
     }
 
-    public Page<ProfessorResumoDTO> listarPublico(String nome, Integer matricula, Pageable pageable) {
-        Specification<Professor> spec = ProfessorSpec.comFiltros(nome, matricula, null, null);
-        return professorRepository.findAll(spec, pageable)
-                .map(mapper::toResumoDTO);
-    }
 
     public ProfessorPesquisaDTO obterPorMatricula(Integer matricula) {
         return professorRepository.findByMatricula(matricula).map(mapper::toDTO)

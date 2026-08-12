@@ -2,16 +2,13 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
-import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.model.entity.Professor;
-import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.service.ProfessorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +21,6 @@ import java.util.UUID;
 public class ProfessorController implements GenericController{
 
     private final ProfessorService professorService;
-    private final SecurityService securityService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -44,12 +40,7 @@ public class ProfessorController implements GenericController{
             @RequestParam(required = false) UUID usuarioAtualizacao,
             Pageable pageable
     ) {
-        boolean isAdmin = securityService.isAdmin();
-        if (!isAdmin && (cpf != null || usuarioAtualizacao != null))
-            throw new AcessoNegadoException("Apenas administradores podem filtrar por esses campos.");
-        if (isAdmin)
-            return professorService.listarAdmin(nome, matricula, cpf, usuarioAtualizacao, pageable);
-        return professorService.listarPublico(nome, matricula, pageable);
+        return professorService.listar(nome, matricula, cpf, usuarioAtualizacao, pageable);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
