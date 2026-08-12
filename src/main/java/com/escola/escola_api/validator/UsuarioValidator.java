@@ -15,9 +15,8 @@ public class UsuarioValidator {
     private final UsuarioRepository usuarioRepository;
 
     public void validar(Usuario usuario) {
-        if (emailIgual(usuario)) {
-            throw new DuplicateRegisterException("Email já cadastrado");
-        }
+        if (emailIgual(usuario)) throw new DuplicateRegisterException("Email já cadastrado");
+        if ((usuarioIgual(usuario))) throw new DuplicateRegisterException("Usuário em uso");
     }
 
     private boolean emailIgual(Usuario usuario) {
@@ -26,5 +25,13 @@ public class UsuarioValidator {
             return usuarioExistente.isPresent();
         }
         return usuarioExistente.filter(u -> !u.getId().equals(usuario.getId())).isPresent();
+    }
+
+    private boolean usuarioIgual(Usuario usuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(usuario.getUsername());
+        if (usuario.getId() == null) {
+            return usuarioOptional.isPresent();
+        }
+        return usuarioOptional.filter(u -> !u.getId().equals(usuario.getId())).isPresent();
     }
 }
