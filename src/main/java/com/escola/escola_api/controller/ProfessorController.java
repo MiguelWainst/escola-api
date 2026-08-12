@@ -25,36 +25,38 @@ public class ProfessorController implements GenericController{
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody @Valid ProfessorCadastroDTO dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public URI salvar(@RequestBody @Valid ProfessorCadastroDTO dto) {
         Professor entity = professorService.salvar(dto);
-        URI location = gerarHeaderLocationMatricula(entity.getMatricula());
-        return ResponseEntity.created(location).build();
+        return gerarHeaderLocationMatricula(entity.getMatricula());
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping
-    public ResponseEntity<List<ProfessorResumoDTO>> listar() {
-        return ResponseEntity.ok(professorService.listar());
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProfessorResumoDTO> listar() {
+        return professorService.listar();
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping("/{matricula}")
-    public ResponseEntity<ProfessorPesquisaDTO> obterPorMatricula(@PathVariable Integer matricula) {
-        return ResponseEntity.ok(professorService.obterPorMatricula(matricula));
+    @ResponseStatus(HttpStatus.OK)
+    public ProfessorPesquisaDTO obterPorMatricula(@PathVariable Integer matricula) {
+        return professorService.obterPorMatricula(matricula);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @PutMapping("/{matricula}")
-    public ResponseEntity<?> atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorCadastroDTO dto) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorCadastroDTO dto) {
         professorService.atualizar(matricula, dto);
-        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{matricula}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer matricula) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Integer matricula) {
         professorService.deletar(matricula);
-        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -64,6 +66,7 @@ public class ProfessorController implements GenericController{
         professorService.desvincularCurso(matricula, id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @PostMapping("/{matricula}/cursos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void vincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
