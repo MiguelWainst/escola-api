@@ -66,7 +66,7 @@ public class ProfessorController implements GenericController{
         professorService.desvincularCurso(matricula, id);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{matricula}/cursos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void vincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
