@@ -15,4 +15,9 @@ public class SecurityService {
         }
         return null;
     }
+
+    public boolean isAdmin() {
+        Usuario usuario = obterUsuarioLogado();
+        return usuario != null && usuario.getRoles().contains("ADMIN");
+    }
 }
