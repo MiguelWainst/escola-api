@@ -2,18 +2,19 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
 import com.escola.escola_api.model.entity.Professor;
+import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.service.ProfessorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class ProfessorController implements GenericController{
 
     private final ProfessorService professorService;
+    private final SecurityService securityService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -32,10 +34,21 @@ public class ProfessorController implements GenericController{
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
-    @GetMapping
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<ProfessorResumoDTO> listar() {
-        return professorService.listar();
+    public Page<?> listar(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) Integer matricula,
+            @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) UUID usuarioAtualizacao,
+            Pageable pageable
+    ) {
+        boolean isAdmin = securityService.isAdmin();
+        if (!isAdmin && (cpf != null || usuarioAtualizacao != null))
+            throw new AccessDeniedException("Apenas administradores podem filtrar por esses campos.");
+        if (isAdmin)
+            return professorService.listarAdmin(nome, matricula, cpf, usuarioAtualizacao, pageable);
+        return professorService.listarPublico(nome, matricula, pageable);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
