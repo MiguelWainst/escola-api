@@ -8,10 +8,10 @@ import com.escola.escola_api.service.CursoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,23 +23,31 @@ public class CursoController implements GenericController{
     private final CursoService cursoService;
 
     @GetMapping
-    public ResponseEntity<List<CursoResumoDTO>> listar() {
-        return ResponseEntity.ok(cursoService.buscarTodos());
+    @ResponseStatus(HttpStatus.OK)
+    public List<CursoResumoDTO> listar() {
+        return cursoService.buscarTodos();
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody @Valid CursoCadastroDTO dto) {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public URI salvar(@RequestBody @Valid CursoCadastroDTO dto) {
         Curso curso = cursoService.salvar(dto);
-        return ResponseEntity.created(gerarHeaderLocation(curso.getId())).build();
+        return gerarHeaderLocation(curso.getId());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CursoPesquisaDTO> buscarPorId(@PathVariable UUID id) {
-        return ResponseEntity.ok(cursoService.buscarPorId(id));
+    @ResponseStatus(HttpStatus.OK)
+    public CursoResumoDTO buscarPorIdPublico(@PathVariable UUID id) {
+        return cursoService.buscarPorId(id);
     }
 
-    @PreAuthorize("hasAnyRole('PROFESSOR', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CursoPesquisaDTO buscarPorIdAdmin(@PathVariable UUID id) {
+        return cursoService.buscarPorIdAdmin(id);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable UUID id, @RequestBody @Valid CursoCadastroDTO dto) {

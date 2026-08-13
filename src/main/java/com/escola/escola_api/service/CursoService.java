@@ -38,7 +38,13 @@ public class CursoService {
         return cursoRepository.findAll().stream().map(mapper::toResumoDTO).toList();
     }
 
-    public CursoPesquisaDTO buscarPorId(UUID id) {
+    public CursoResumoDTO buscarPorId(UUID id) {
+        return cursoRepository.findById(id)
+                .map(mapper::toResumoDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
+    }
+
+    public CursoPesquisaDTO buscarPorIdAdmin(UUID id) {
         return cursoRepository.findById(id)
                 .map(mapper::toPesquisaDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
