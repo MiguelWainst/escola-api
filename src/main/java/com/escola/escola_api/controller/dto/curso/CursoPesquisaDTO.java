@@ -9,5 +9,5 @@ public record CursoPesquisaDTO(
         Integer cargaHoras,
         List<Integer> matriculaAlunos,
         UUID usuarioAtualizacao
-) {
+) implements CursoView{
 }
