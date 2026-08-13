@@ -73,7 +73,7 @@ public class AlunoService {
         Aluno aluno = alunoRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
         mapper.updateEntityFromDTO(dto, aluno);
-        aluno.setCpf(limparCpf(dto.cpf()));
+        if (dto.cpf() != null && !dto.cpf().isBlank())aluno.setCpf(limparCpf(dto.cpf()));
         validator.validar(aluno);
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
     }

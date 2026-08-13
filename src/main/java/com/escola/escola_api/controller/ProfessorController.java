@@ -1,5 +1,6 @@
 package com.escola.escola_api.controller;
 
+import com.escola.escola_api.controller.dto.professor.ProfessorAtualizacaoDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorView;
@@ -54,7 +55,7 @@ public class ProfessorController implements GenericController{
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @PutMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorCadastroDTO dto) {
+    public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorAtualizacaoDTO dto) {
         professorService.atualizar(matricula, dto);
     }
 
