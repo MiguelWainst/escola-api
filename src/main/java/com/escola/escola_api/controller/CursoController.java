@@ -3,16 +3,18 @@ package com.escola.escola_api.controller;
 import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
 import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
 import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
+import com.escola.escola_api.controller.dto.curso.CursoView;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.service.CursoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,8 +26,14 @@ public class CursoController implements GenericController{
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CursoResumoDTO> listar() {
-        return cursoService.buscarTodos();
+    public Page<CursoView> listar(
+            @RequestParam(required = false) UUID id,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) Integer cargaHora,
+            @RequestParam(required = false) UUID usuarioAtualizacao,
+            Pageable pageable
+    ) {
+        return cursoService.listar(id, nome, cargaHora, usuarioAtualizacao, pageable);
     }
 
     @PostMapping

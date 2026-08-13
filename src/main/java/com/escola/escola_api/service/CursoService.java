@@ -3,18 +3,23 @@ package com.escola.escola_api.service;
 import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
 import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
 import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
+import com.escola.escola_api.controller.dto.curso.CursoView;
+import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.CursoComVinculoException;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.repository.mapper.CursoMapper;
+import com.escola.escola_api.repository.specification.CursoSpec;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.validator.CursoValidator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,8 +39,15 @@ public class CursoService {
         return cursoRepository.save(curso);
     }
 
-    public List<CursoResumoDTO> buscarTodos() {
-        return cursoRepository.findAll().stream().map(mapper::toResumoDTO).toList();
+    public Page<CursoView> listar(UUID id, String nome, Integer cargaHoras, UUID usuarioAtualizacao, Pageable pageable) {
+        boolean isAdmin = securityService.isAdmin();
+        if (!isAdmin && (id != null || usuarioAtualizacao != null))
+            throw new AcessoNegadoException("Apenas administradores podem filtrar por esses campos.");
+        Specification<Curso> spec = isAdmin
+                ? CursoSpec.comFiltros(id, nome, cargaHoras, usuarioAtualizacao)
+                : CursoSpec.comFiltros(null, nome, cargaHoras, null);
+        Page<Curso> resultado = cursoRepository.findAll(spec, pageable);
+        return isAdmin ? resultado.map(mapper::toPesquisaDTO) : resultado.map(mapper::toResumoDTO);
     }
 
     public CursoResumoDTO buscarPorId(UUID id) {
