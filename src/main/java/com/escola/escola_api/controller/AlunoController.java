@@ -10,12 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,10 +24,10 @@ public class AlunoController implements GenericController {
     private final AlunoService alunoService;
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody @Valid AlunoCadastroDTO dto) {
+    @ResponseStatus(HttpStatus.OK)
+    public URI salvar(@RequestBody @Valid AlunoCadastroDTO dto) {
         Aluno entity = alunoService.salvar(dto);
-        URI location = gerarHeaderLocationMatricula(entity.getMatricula());
-        return ResponseEntity.created(location).build();
+        return gerarHeaderLocationMatricula(entity.getMatricula());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -53,21 +51,20 @@ public class AlunoController implements GenericController {
     }
 
     @GetMapping("/publico/{matricula}")
-    @ResponseStatus(HttpStatus.OK)
     public AlunoResumoDTO buscarPorMatriculaPublico(@PathVariable Integer matricula) {
         return alunoService.buscarPorMatriculaPublico(matricula);
     }
 
     @PutMapping("/{matricula}")
-    public ResponseEntity<Void> atualizar(@PathVariable Integer matricula, @RequestBody @Valid AlunoCadastroDTO dto) {
+    @ResponseStatus(HttpStatus.OK)
+    public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid AlunoCadastroDTO dto) {
         alunoService.atualizar(matricula, dto);
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{matricula}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer matricula) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Integer matricula) {
         alunoService.excluir(matricula);
-        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
