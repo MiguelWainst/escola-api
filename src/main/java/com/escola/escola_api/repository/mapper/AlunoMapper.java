@@ -4,9 +4,7 @@ import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
 import com.escola.escola_api.model.entity.Aluno;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AlunoMapper {
@@ -17,5 +15,6 @@ public interface AlunoMapper {
     @Mapping(target = "nomeCurso", expression = "java(aluno.getCurso() != null ? aluno.getCurso().getNome() : null)")
     AlunoResumoDTO toResumoDTO(Aluno aluno);
     @Mapping(target = "curso", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDTO(AlunoCadastroDTO dtoFromUser, @MappingTarget Aluno entityExistente);
 }
