@@ -6,5 +6,5 @@ public record CursoResumoDTO(
         UUID id,
         String nome,
         Integer cargaHoras
-) {
+) implements CursoView{
 }
