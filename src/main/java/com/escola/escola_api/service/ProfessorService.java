@@ -3,6 +3,7 @@ package com.escola.escola_api.service;
 import com.escola.escola_api.configuration.RegraNegocioProperties;
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
+import com.escola.escola_api.controller.dto.professor.ProfessorView;
 import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.CursoJaVinculadoException;
 import com.escola.escola_api.exception.CursoLotadoException;
@@ -54,7 +55,7 @@ public class ProfessorService {
         return professorRepository.save(entity);
     }
 
-    public Page<?> listar(String nome, Integer matricula, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
+    public Page<ProfessorView> listar(String nome, Integer matricula, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
         boolean isAdmin = securityService.isAdmin();
         if (!isAdmin && (cpf != null || usuarioAtualizacao != null))
             throw new AcessoNegadoException("Apenas administradores podem filtrar por esses campos.");

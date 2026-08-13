@@ -2,6 +2,7 @@ package com.escola.escola_api.controller;
 
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
+import com.escola.escola_api.controller.dto.professor.ProfessorView;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.service.ProfessorService;
 import jakarta.validation.Valid;
@@ -33,7 +34,7 @@ public class ProfessorController implements GenericController{
     @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public Page<?> listar(
+    public Page<ProfessorView> listar(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) Integer matricula,
             @RequestParam(required = false) String cpf,
