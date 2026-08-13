@@ -3,6 +3,7 @@ package com.escola.escola_api.controller;
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
+import com.escola.escola_api.controller.dto.aluno.AlunoView;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.service.AlunoService;
 import jakarta.validation.Valid;
@@ -33,7 +34,7 @@ public class AlunoController implements GenericController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<?> listar(
+    public Page<AlunoView> listar(
             @RequestParam(required = false) Integer matricula,
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) String cpf,

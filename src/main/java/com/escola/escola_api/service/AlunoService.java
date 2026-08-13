@@ -4,6 +4,7 @@ import com.escola.escola_api.configuration.RegraNegocioProperties;
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
+import com.escola.escola_api.controller.dto.aluno.AlunoView;
 import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.AlunoComCursoException;
 import com.escola.escola_api.exception.CursoLotadoException;
@@ -23,7 +24,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,7 +50,7 @@ public class AlunoService {
         return alunoRepository.save(aluno);
     }
 
-    public Page<?> listar(Integer matricula, String nome, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
+    public Page<AlunoView> listar(Integer matricula, String nome, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
         boolean isAdmin = securityService.isAdmin();
         if (!isAdmin && (cpf != null || usuarioAtualizacao != null))
             throw new AcessoNegadoException("Apenas administradores podem filtrar por esses campos.");
