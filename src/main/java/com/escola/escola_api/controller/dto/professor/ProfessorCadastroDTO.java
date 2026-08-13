@@ -21,7 +21,7 @@ public record ProfessorCadastroDTO(
         @Past(message = "A data de nascimento deve ser uma data do passado") // 👈 Impede datas futuras!
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate dataNascimento,
-        @Size(max = 14, message = "O CPF não pode ter mais de 14 caracteres")
+        @Size(max = 14, min = 11, message = "O CPF não pode ter mais de 14 caracteres")
         @CPF(message = "CPF inválido. Certifique-se de enviar os 11 dígitos corretos")
         String cpf,
         List<UUID> idCurso
