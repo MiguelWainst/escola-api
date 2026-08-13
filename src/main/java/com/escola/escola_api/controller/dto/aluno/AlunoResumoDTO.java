@@ -4,5 +4,5 @@ public record AlunoResumoDTO(
         Integer matricula,
         String nome,
         String nomeCurso
-) {
+) implements AlunoView{
 }

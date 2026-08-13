@@ -8,5 +8,5 @@ public record AlunoPesquisaDTO(
         String email,
         String cpf,
         CursoResumoDTO curso
-) {
+) implements AlunoView {
 }
