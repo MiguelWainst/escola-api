@@ -24,7 +24,7 @@ public class AlunoController implements GenericController {
     private final AlunoService alunoService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public URI salvar(@RequestBody @Valid AlunoCadastroDTO dto) {
         Aluno entity = alunoService.salvar(dto);
         return gerarHeaderLocationMatricula(entity.getMatricula());
@@ -56,7 +56,7 @@ public class AlunoController implements GenericController {
     }
 
     @PutMapping("/{matricula}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid AlunoCadastroDTO dto) {
         alunoService.atualizar(matricula, dto);
     }

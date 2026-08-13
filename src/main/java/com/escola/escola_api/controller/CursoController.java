@@ -37,7 +37,7 @@ public class CursoController implements GenericController{
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.CREATED)
     public URI salvar(@RequestBody @Valid CursoCadastroDTO dto) {
         Curso curso = cursoService.salvar(dto);
         return gerarHeaderLocation(curso.getId());
