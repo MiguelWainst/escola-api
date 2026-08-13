@@ -1,9 +1,6 @@
 package com.escola.escola_api.controller;
 
-import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
-import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
-import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
-import com.escola.escola_api.controller.dto.aluno.AlunoView;
+import com.escola.escola_api.controller.dto.aluno.*;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.service.AlunoService;
 import jakarta.validation.Valid;
@@ -31,7 +28,6 @@ public class AlunoController implements GenericController {
         return gerarHeaderLocationMatricula(entity.getMatricula());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<AlunoView> listar(
@@ -58,7 +54,7 @@ public class AlunoController implements GenericController {
 
     @PutMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid AlunoCadastroDTO dto) {
+    public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid AlunoAtualizacaoDTO dto) {
         alunoService.atualizar(matricula, dto);
     }
 

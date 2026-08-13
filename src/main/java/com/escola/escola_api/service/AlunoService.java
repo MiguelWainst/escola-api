@@ -1,10 +1,7 @@
 package com.escola.escola_api.service;
 
 import com.escola.escola_api.configuration.RegraNegocioProperties;
-import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
-import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
-import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
-import com.escola.escola_api.controller.dto.aluno.AlunoView;
+import com.escola.escola_api.controller.dto.aluno.*;
 import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.AlunoComCursoException;
 import com.escola.escola_api.exception.CursoLotadoException;
@@ -72,14 +69,10 @@ public class AlunoService {
     }
 
     @Transactional
-    public void atualizar(Integer matricula, AlunoCadastroDTO dto) {
+    public void atualizar(Integer matricula, AlunoAtualizacaoDTO dto) {
         Aluno aluno = alunoRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
         mapper.updateEntityFromDTO(dto, aluno);
-        if (dto.idCurso() != null) {
-            aluno.setCurso(cursoRepository.findById(dto.idCurso())
-                    .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado.")));
-        }
         aluno.setCpf(limparCpf(dto.cpf()));
         validator.validar(aluno);
         aluno.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());

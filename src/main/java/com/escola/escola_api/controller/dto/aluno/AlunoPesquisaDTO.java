@@ -3,7 +3,7 @@ package com.escola.escola_api.controller.dto.aluno;
 import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
 
 public record AlunoPesquisaDTO(
-        String matricula,
+        Integer matricula,
         String nome,
         String email,
         String cpf,
