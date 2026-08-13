@@ -1,7 +1,7 @@
 package com.escola.escola_api.controller.dto.aluno;
 
 import com.escola.escola_api.validator.DominioEmailValido;
-import com.escola.escola_api.validator.ValidacaoConstantes;
+import com.escola.escola_api.validator.ValidConst;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public record AlunoCadastroDTO(
         @NotBlank(message = "O nome é obrigatório")
-        @Size(max = ValidacaoConstantes.NOME_MAX, min = ValidacaoConstantes.NOME_MIN, message = "O nome deve ter entre {min} e {max} caracteres")
+        @Size(max = ValidConst.NOME_MAX, min = ValidConst.NOME_MIN, message = "O nome deve ter entre {min} e {max} caracteres")
         String nome,
         @Email
         @DominioEmailValido(message = "O domínio do email é inválido")
@@ -20,7 +20,7 @@ public record AlunoCadastroDTO(
         LocalDate dataNascimento,
         @CPF(message = "O CPF é inválido")
         @NotBlank(message = "O CPF é obrigatório")
-        @Size(max = ValidacaoConstantes.CPF_MAX, min = ValidacaoConstantes.CPF_MIN, message = "CPF deve estar entre {min} e {max} caracteres")
+        @Size(max = ValidConst.CPF_MAX, min = ValidConst.CPF_MIN, message = "CPF deve estar entre {min} e {max} caracteres")
         String cpf,
         UUID idCurso
 ) {
