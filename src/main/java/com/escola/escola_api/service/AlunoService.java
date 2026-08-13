@@ -4,6 +4,7 @@ import com.escola.escola_api.configuration.RegraNegocioProperties;
 import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoPesquisaDTO;
 import com.escola.escola_api.controller.dto.aluno.AlunoResumoDTO;
+import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.AlunoComCursoException;
 import com.escola.escola_api.exception.CursoLotadoException;
 import com.escola.escola_api.model.entity.Aluno;
@@ -11,10 +12,14 @@ import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.repository.AlunoRepository;
 import com.escola.escola_api.repository.CursoRepository;
 import com.escola.escola_api.repository.mapper.AlunoMapper;
+import com.escola.escola_api.repository.specification.AlunoSpec;
 import com.escola.escola_api.security.SecurityService;
 import com.escola.escola_api.validator.AlunoValidator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,18 +50,15 @@ public class AlunoService {
         return alunoRepository.save(aluno);
     }
 
-    public List<AlunoPesquisaDTO> listarAdmin() {
-        return alunoRepository.findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .toList();
-    }
-
-    public List<AlunoResumoDTO> listarResumo() {
-        return alunoRepository.findAll()
-                .stream()
-                .map(mapper::toResumoDTO)
-                .toList();
+    public Page<?> listar(Integer matricula, String nome, String cpf, UUID usuarioAtualizacao, Pageable pageable) {
+        boolean isAdmin = securityService.isAdmin();
+        if (!isAdmin && (cpf != null || usuarioAtualizacao != null))
+            throw new AcessoNegadoException("Apenas administradores podem filtrar por esses campos.");
+        Specification<Aluno> spec = isAdmin
+                ? AlunoSpec.comFiltros(matricula, nome, cpf, usuarioAtualizacao)
+                : AlunoSpec.comFiltros(null, nome, null, null);
+        Page<Aluno> resultado = alunoRepository.findAll(spec, pageable);
+        return isAdmin ? resultado.map(mapper::toDTO) : resultado.map(mapper::toResumoDTO);
     }
 
     public AlunoPesquisaDTO buscarPorMatriculaAdmin(Integer matricula) {

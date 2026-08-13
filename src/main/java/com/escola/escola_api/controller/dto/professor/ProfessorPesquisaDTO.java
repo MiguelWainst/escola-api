@@ -14,5 +14,5 @@ public record ProfessorPesquisaDTO(
         LocalDate dataContratacao,
         String usuarioAtualizacao,
         List<CursoResumoDTO> cursos
-) {
+) implements ProfessorView {
 }
