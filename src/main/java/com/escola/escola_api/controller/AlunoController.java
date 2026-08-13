@@ -7,6 +7,8 @@ import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.service.AlunoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,14 +33,16 @@ public class AlunoController implements GenericController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin/listar")
-    public ResponseEntity<List<AlunoPesquisaDTO>> listarAdmin() {
-        return ResponseEntity.ok(alunoService.listarAdmin());
-    }
-
-    @GetMapping("/publico/listar")
-    public ResponseEntity<List<AlunoResumoDTO>> listarResumo() {
-        return ResponseEntity.ok(alunoService.listarResumo());
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Page<?> listar(
+            @RequestParam(required = false) Integer matricula,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) UUID usuarioAtualizacao,
+            Pageable pageable
+    ) {
+        return (alunoService.listar(matricula, nome, cpf, usuarioAtualizacao, pageable));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
