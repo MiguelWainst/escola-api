@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class CursoSpec {
-    public Specification<Curso> comFiltros(UUID id, String nome, Integer cargaHoras, UUID usuarioAtualizacao) {
+    public static Specification<Curso> comFiltros(UUID id, String nome, Integer cargaHoras, UUID usuarioAtualizacao) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (id != null) predicates.add(cb.equal(root.get("id"), id));
