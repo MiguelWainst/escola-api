@@ -18,9 +18,10 @@ public record ProfessorCadastroDTO(
         @Email(message = "O email deve ser válido")
         @DominioEmailValido(message = "O domínio do email é inválido")
         String email,
-        @Past(message = "A data de nascimento deve ser uma data do passado") // 👈 Impede datas futuras!
+        @Past(message = "A data de nascimento deve ser uma data do passado")
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate dataNascimento,
+        @NotBlank(message = "O CPF é obrigatório")
         @Size(max = ValidConst.CPF_MAX, min = ValidConst.CPF_MIN, message = "CPF deve estar entre {min} e {max} caracteres")
         @CPF(message = "CPF inválido. Certifique-se de enviar os 11 dígitos corretos")
         String cpf,

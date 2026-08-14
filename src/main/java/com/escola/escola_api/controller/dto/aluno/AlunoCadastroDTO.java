@@ -2,6 +2,7 @@ package com.escola.escola_api.controller.dto.aluno;
 
 import com.escola.escola_api.validator.DominioEmailValido;
 import com.escola.escola_api.validator.ValidConst;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -17,6 +18,7 @@ public record AlunoCadastroDTO(
         @NotBlank(message = "O email é obrigatório")
         String email,
         @Past(message = "A data de nascimento deve ser uma data passada")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate dataNascimento,
         @CPF(message = "O CPF é inválido")
         @NotBlank(message = "O CPF é obrigatório")
