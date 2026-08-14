@@ -1,9 +1,6 @@
 package com.escola.escola_api.controller;
 
-import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
-import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
-import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
-import com.escola.escola_api.controller.dto.curso.CursoView;
+import com.escola.escola_api.controller.dto.curso.*;
 import com.escola.escola_api.model.entity.Curso;
 import com.escola.escola_api.service.CursoService;
 import jakarta.validation.Valid;
@@ -58,7 +55,7 @@ public class CursoController implements GenericController{
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable UUID id, @RequestBody @Valid CursoCadastroDTO dto) {
+    public void atualizar(@PathVariable UUID id, @RequestBody @Valid CursoAtualizacaoDTO dto) {
         cursoService.atualizar(id, dto);
     }
 
