@@ -1,9 +1,6 @@
 package com.escola.escola_api.service;
 
-import com.escola.escola_api.controller.dto.curso.CursoCadastroDTO;
-import com.escola.escola_api.controller.dto.curso.CursoPesquisaDTO;
-import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
-import com.escola.escola_api.controller.dto.curso.CursoView;
+import com.escola.escola_api.controller.dto.curso.*;
 import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.CursoComVinculoException;
 import com.escola.escola_api.model.entity.Curso;
@@ -63,7 +60,7 @@ public class CursoService {
     }
 
     @Transactional
-    public void atualizar(UUID id, CursoCadastroDTO dto) {
+    public void atualizar(UUID id, CursoAtualizacaoDTO dto) {
         Curso cursoDoBanco = cursoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado."));
         mapper.updateEntityFromDTO(dto, cursoDoBanco);

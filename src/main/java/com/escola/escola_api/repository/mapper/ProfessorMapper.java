@@ -1,5 +1,6 @@
 package com.escola.escola_api.repository.mapper;
 
+import com.escola.escola_api.controller.dto.professor.ProfessorAtualizacaoDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
 import com.escola.escola_api.controller.dto.professor.ProfessorResumoDTO;
@@ -19,5 +20,5 @@ public interface ProfessorMapper {
     ProfessorPesquisaDTO toDTO(Professor professor);
     @Mapping(target = "cursos", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(ProfessorCadastroDTO dtoFromUser, @MappingTarget Professor entityExistente);
+    void updateEntityFromDTO(ProfessorAtualizacaoDTO dtoFromUser, @MappingTarget Professor entityExistente);
 }

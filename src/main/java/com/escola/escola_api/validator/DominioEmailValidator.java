@@ -25,7 +25,8 @@ public class DominioEmailValidator implements ConstraintValidator<DominioEmailVa
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        if (email == null || !email.contains("@")) {
+        if (email == null) return true;
+        if (!email.contains("@")) {
             return false;
         }
         String dominio = email.substring(email.indexOf("@") + 1).trim();
