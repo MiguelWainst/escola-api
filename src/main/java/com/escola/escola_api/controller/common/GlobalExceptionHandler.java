@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -174,6 +175,16 @@ public class GlobalExceptionHandler {
         return new ErroResposta(
                 HttpStatus.CONTINUE.value(),
                 e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErroResposta handleBadCredentialsException(BadCredentialsException e) {
+        return new ErroResposta(
+                HttpStatus.UNAUTHORIZED.value(),
+                e.getLocalizedMessage(),
                 List.of()
         );
     }
