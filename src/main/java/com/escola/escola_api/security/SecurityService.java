@@ -16,9 +16,11 @@ public class SecurityService {
 
     public Usuario obterUsuarioLogado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) return null;
-        return usuarioRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        if (authentication != null && authentication.getPrincipal() instanceof CustomPrincipal principal) {
+            return usuarioRepository.findById(principal.id())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        }
+        return null;
     }
 
     public boolean isAdmin() {

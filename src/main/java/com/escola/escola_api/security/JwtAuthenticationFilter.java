@@ -20,6 +20,7 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
 
-        if (header != null && header.startsWith("Bearer")) {
+        if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
@@ -44,14 +45,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .getPayload();
 
             String username = claims.getSubject();
+            UUID idUsuario = UUID.fromString(claims.get("idUsuario", String.class));
             List<String> roles = claims.get("roles", List.class);
 
             List<GrantedAuthority> authorities = roles.stream()
                     .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
                     .map(role -> (GrantedAuthority) new SimpleGrantedAuthority(role))
                     .toList();
+
+            CustomPrincipal principal = new CustomPrincipal(idUsuario, username);
+
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    new UsernamePasswordAuthenticationToken(principal, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
