@@ -143,7 +143,7 @@ public class GlobalExceptionHandler {
                 e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "válido"
         );
         return new ErroResposta(
-                HttpStatus.CONFLICT.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 mensagem,
                 List.of()
         );
@@ -173,7 +173,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErroResposta handleCursoLotadoException(CursoLotadoException e) {
         return new ErroResposta(
-                HttpStatus.CONTINUE.value(),
+                HttpStatus.CONFLICT.value(),
                 e.getMessage(),
                 List.of()
         );
