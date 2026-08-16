@@ -1,5 +1,6 @@
 package com.escola.escola_api.configuration;
 
+import com.escola.escola_api.security.CustomAccessDeniedHandler;
 import com.escola.escola_api.security.CustomAuthenticationEntryPoint;
 import com.escola.escola_api.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -40,6 +42,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(handle -> handle.authenticationEntryPoint(authenticationEntryPoint))
+                .exceptionHandling(handle -> handle.accessDeniedHandler(accessDeniedHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
