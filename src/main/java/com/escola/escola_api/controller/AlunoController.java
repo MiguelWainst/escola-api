@@ -54,26 +54,28 @@ public class AlunoController implements GenericController {
         return alunoService.buscarPorMatriculaPublico(matricula);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoAluno(#matricula)")
     @PutMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid AlunoAtualizacaoDTO dto) {
         alunoService.atualizar(matricula, dto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Integer matricula) {
         alunoService.excluir(matricula);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoAluno(#matricula)")
     @DeleteMapping("/{matricula}/curso")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desvincularCurso(@PathVariable Integer matricula) {
         alunoService.desvincular(matricula);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoAluno(#matricula)")
     @PostMapping("/{matricula}/curso/{idCurso}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void vincularCurso(@PathVariable Integer matricula, @PathVariable UUID idCurso) {

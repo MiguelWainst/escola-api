@@ -51,28 +51,28 @@ public class ProfessorController implements GenericController{
         return professorService.obterPorMatricula(matricula);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")
     @PutMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorAtualizacaoDTO dto) {
         professorService.atualizar(matricula, dto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Integer matricula) {
         professorService.deletar(matricula);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")
     @DeleteMapping("/{matricula}/cursos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desvincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
         professorService.desvincularCurso(matricula, id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")
     @PostMapping("/{matricula}/cursos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void vincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
