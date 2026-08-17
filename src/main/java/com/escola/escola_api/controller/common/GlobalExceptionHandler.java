@@ -189,6 +189,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EntidadeJaVinculadaException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleEntidadeJaVinculadaException(EntidadeJaVinculadaException e) {
+        return new ErroResposta(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErroResposta handleRuntimeException(RuntimeException e) {

@@ -27,8 +27,7 @@ public class SecurityConfiguration {
 
     private static final String[] ROTAS_PUBLICAS_GET = {
             "/util/cpf",
-            "/cursos",
-            "/cursos/{id}",
+            "/cursos/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html"

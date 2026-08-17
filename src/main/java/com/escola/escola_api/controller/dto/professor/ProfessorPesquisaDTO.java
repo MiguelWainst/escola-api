@@ -4,6 +4,7 @@ import com.escola.escola_api.controller.dto.curso.CursoResumoDTO;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public record ProfessorPesquisaDTO(
         Integer matricula,
@@ -13,6 +14,7 @@ public record ProfessorPesquisaDTO(
         String cpf,
         LocalDate dataContratacao,
         String usuarioAtualizacao,
-        List<CursoResumoDTO> cursos
+        List<CursoResumoDTO> cursos,
+        UUID idUsuario
 ) implements ProfessorView {
 }

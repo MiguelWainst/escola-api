@@ -7,6 +7,7 @@ import com.escola.escola_api.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +22,9 @@ public class UsuarioController implements GenericController{
     private final UsuarioService usuarioService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public URI cadastrarUsuario(@RequestBody @Valid UsuarioCadastroDTO dto) {
+    public ResponseEntity<URI> cadastrarUsuario(@RequestBody @Valid UsuarioCadastroDTO dto) {
         Usuario usuario = usuarioService.cadastrar(dto);
-        return gerarHeaderLocation(usuario.getId());
+        return ResponseEntity.created(gerarHeaderLocation(usuario.getId())).build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -33,4 +33,15 @@ public class UsuarioController implements GenericController{
     public UsuarioPesquisaDTO buscarUsuarioId(@PathVariable UUID id) {
         return usuarioService.obterPorId(id);
     }
+
+    // Comming soon
+//    @PostMapping("/professor/{matricula}/{idUsuario}")
+//    public void vincularUsuarioProfessor(@PathVariable Integer matricula, @PathVariable UUID idUsuario) {
+//        usuarioService.vincularUsuarioProfessor(matricula, idUsuario);
+//    }
+//
+//    @PostMapping("/aluno/{matricula}/{idUsuario}")
+//    public void vincularUsuarioAluno(@PathVariable Integer matricula, @PathVariable UUID idUsuario) {
+//        usuarioService.vincularUsuarioAluno(matricula, idUsuario);
+//    }
 }
