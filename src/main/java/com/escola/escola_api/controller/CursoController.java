@@ -53,6 +53,7 @@ public class CursoController implements GenericController{
         return cursoService.buscarPorIdAdmin(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable UUID id, @RequestBody @Valid CursoAtualizacaoDTO dto) {

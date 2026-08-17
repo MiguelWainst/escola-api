@@ -42,14 +42,14 @@ public class AlunoController implements GenericController {
         return (alunoService.listar(matricula, nome, cpf, usuarioAtualizacao, pageable));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoAluno(#matricula)")
     @GetMapping("/admin/{matricula}")
     @ResponseStatus(HttpStatus.OK)
-    public AlunoPesquisaDTO buscarPorMatriculaAdmin(@PathVariable Integer matricula) {
+    public AlunoPesquisaDTO buscarPorMatriculaDetalhes(@PathVariable Integer matricula) {
         return alunoService.buscarPorMatriculaAdmin(matricula);
     }
 
-    @GetMapping("/publico/{matricula}")
+    @GetMapping("/{matricula}")
     public AlunoResumoDTO buscarPorMatriculaPublico(@PathVariable Integer matricula) {
         return alunoService.buscarPorMatriculaPublico(matricula);
     }
