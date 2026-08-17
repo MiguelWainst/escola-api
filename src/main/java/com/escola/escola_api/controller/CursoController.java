@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,14 @@ public class CursoController implements GenericController{
 
     private final CursoService cursoService;
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<URI> salvar(@RequestBody @Valid CursoCadastroDTO dto) {
+        Curso curso = cursoService.salvar(dto);
+        return ResponseEntity.created(gerarHeaderLocation(curso.getId())).build();
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<CursoView> listar(
@@ -31,13 +40,6 @@ public class CursoController implements GenericController{
             Pageable pageable
     ) {
         return cursoService.listar(id, nome, cargaHora, usuarioAtualizacao, pageable);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public URI salvar(@RequestBody @Valid CursoCadastroDTO dto) {
-        Curso curso = cursoService.salvar(dto);
-        return gerarHeaderLocation(curso.getId());
     }
 
     @GetMapping("/{id}")
