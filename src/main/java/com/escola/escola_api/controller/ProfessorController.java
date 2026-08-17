@@ -1,9 +1,6 @@
 package com.escola.escola_api.controller;
 
-import com.escola.escola_api.controller.dto.professor.ProfessorAtualizacaoDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorView;
+import com.escola.escola_api.controller.dto.professor.*;
 import com.escola.escola_api.model.entity.Professor;
 import com.escola.escola_api.service.ProfessorService;
 import jakarta.validation.Valid;
@@ -45,10 +42,17 @@ public class ProfessorController implements GenericController{
         return professorService.listar(nome, matricula, cpf, usuarioAtualizacao, pageable);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")
+    @GetMapping("/admin/{matricula}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProfessorPesquisaDTO obterPorMatriculaDetalhes(@PathVariable Integer matricula) {
+        return professorService.obterPorMatriculaDetalhes(matricula);
+    }
+
     @GetMapping("/{matricula}")
     @ResponseStatus(HttpStatus.OK)
-    public ProfessorPesquisaDTO obterPorMatricula(@PathVariable Integer matricula) {
-        return professorService.obterPorMatricula(matricula);
+    public ProfessorResumoDTO obterPorMatriculaResumo(@PathVariable Integer matricula) {
+        return professorService.obterPorMatriculaResumo(matricula);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")

@@ -1,10 +1,7 @@
 package com.escola.escola_api.service;
 
 import com.escola.escola_api.configuration.RegraNegocioProperties;
-import com.escola.escola_api.controller.dto.professor.ProfessorAtualizacaoDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorPesquisaDTO;
-import com.escola.escola_api.controller.dto.professor.ProfessorView;
+import com.escola.escola_api.controller.dto.professor.*;
 import com.escola.escola_api.exception.AcessoNegadoException;
 import com.escola.escola_api.exception.CursoJaVinculadoException;
 import com.escola.escola_api.exception.CursoLotadoException;
@@ -68,9 +65,14 @@ public class ProfessorService {
     }
 
 
-    public ProfessorPesquisaDTO obterPorMatricula(Integer matricula) {
+    public ProfessorPesquisaDTO obterPorMatriculaDetalhes(Integer matricula) {
         return professorRepository.findByMatricula(matricula).map(mapper::toDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado."));
+    }
+
+    public ProfessorResumoDTO obterPorMatriculaResumo(Integer matricula) {
+        return professorRepository.findByMatricula(matricula).map(mapper::toResumoDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Professor não encontrado"));
     }
 
     @Transactional
