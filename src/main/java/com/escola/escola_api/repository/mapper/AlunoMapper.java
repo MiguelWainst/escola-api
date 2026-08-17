@@ -12,9 +12,12 @@ public interface AlunoMapper {
 
     @Mapping(target = "curso", ignore = true)
     Aluno toEntity(AlunoCadastroDTO dto);
+
     AlunoPesquisaDTO toDTO(Aluno aluno);
+
     @Mapping(target = "nomeCurso", expression = "java(aluno.getCurso() != null ? aluno.getCurso().getNome() : null)")
     AlunoResumoDTO toResumoDTO(Aluno aluno);
+
     @Mapping(target = "curso", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDTO(AlunoAtualizacaoDTO dtoFromUser, @MappingTarget Aluno entityExistente);

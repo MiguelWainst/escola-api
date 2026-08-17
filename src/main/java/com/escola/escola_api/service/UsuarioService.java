@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,13 +24,22 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final UsuarioValidator validator;
     private final UsuarioMapper mapper;
+    private final AlunoService alunoService;
+    private final ProfessorService professorService;
 
-    public Usuario salvar(UsuarioCadastroDTO dto) {
-        Usuario usuario = mapper.toEntity(dto);
-        validator.validar(usuario);
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        usuario.setRoles(List.of("GUEST"));
-        return usuarioRepository.save(usuario);
+
+    @Transactional
+    public Usuario cadastrar(UsuarioCadastroDTO dto) {
+        Usuario entity = mapper.toEntity(dto);
+        entity.setSenha(passwordEncoder.encode(dto.senha()));
+        entity.setRoles(List.of(dto.tipoConta().name()));
+        validator.validar(entity);
+        usuarioRepository.save(entity);
+        switch (dto.tipoConta()) {
+            case ALUNO -> alunoService.salvar(dto.dadosAluno(), entity.getId());
+            case PROFESSOR ->  professorService.salvar(dto.dadosProfessor(), entity.getId());
+        }
+        return entity;
     }
 
     public UsuarioPesquisaDTO obterPorId(UUID id) {

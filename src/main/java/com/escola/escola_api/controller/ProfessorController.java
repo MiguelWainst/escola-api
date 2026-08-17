@@ -24,15 +24,15 @@ public class ProfessorController implements GenericController{
 
     private final ProfessorService professorService;
 
+    // Cadastro feito apenas por ADMIN, sem conta de usuário vinculado.
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public URI salvar(@RequestBody @Valid ProfessorCadastroDTO dto) {
-        Professor entity = professorService.salvar(dto);
+        Professor entity = professorService.salvar(dto, null);
         return gerarHeaderLocationMatricula(entity.getMatricula());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public Page<ProfessorView> listar(
@@ -45,35 +45,34 @@ public class ProfessorController implements GenericController{
         return professorService.listar(nome, matricula, cpf, usuarioAtualizacao, pageable);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping("/{matricula}")
     @ResponseStatus(HttpStatus.OK)
     public ProfessorPesquisaDTO obterPorMatricula(@PathVariable Integer matricula) {
         return professorService.obterPorMatricula(matricula);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")
     @PutMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable Integer matricula, @RequestBody @Valid ProfessorAtualizacaoDTO dto) {
         professorService.atualizar(matricula, dto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{matricula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Integer matricula) {
         professorService.deletar(matricula);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")
     @DeleteMapping("/{matricula}/cursos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desvincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
         professorService.desvincularCurso(matricula, id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isDonoDoProfessor(#matricula)")
     @PostMapping("/{matricula}/cursos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void vincularCurso(@PathVariable Integer matricula, @PathVariable UUID id) {
