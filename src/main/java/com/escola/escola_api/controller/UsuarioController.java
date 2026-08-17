@@ -16,12 +16,10 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/usuarios")
-@PreAuthorize("hasRole('ADMIN')")
 public class UsuarioController implements GenericController{
 
     private final UsuarioService usuarioService;
 
-    @PreAuthorize("permitAll()")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public URI cadastrarUsuario(@RequestBody @Valid UsuarioCadastroDTO dto) {
@@ -29,6 +27,7 @@ public class UsuarioController implements GenericController{
         return gerarHeaderLocation(usuario.getId());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UsuarioPesquisaDTO buscarUsuarioId(@PathVariable UUID id) {
