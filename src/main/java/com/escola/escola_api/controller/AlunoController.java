@@ -21,10 +21,12 @@ public class AlunoController implements GenericController {
 
     private final AlunoService alunoService;
 
+    // Cadastro feito apenas por ADMIN, sem conta de usuário vinculado.
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public URI salvar(@RequestBody @Valid AlunoCadastroDTO dto) {
-        Aluno entity = alunoService.salvar(dto);
+        Aluno entity = alunoService.salvar(dto, null);
         return gerarHeaderLocationMatricula(entity.getMatricula());
     }
 

@@ -25,7 +25,7 @@ public class UsuarioController implements GenericController{
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public URI cadastrarUsuario(@RequestBody @Valid UsuarioCadastroDTO dto) {
-        Usuario usuario = usuarioService.salvar(dto);
+        Usuario usuario = usuarioService.cadastrar(dto);
         return gerarHeaderLocation(usuario.getId());
     }
 

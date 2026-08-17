@@ -41,7 +41,7 @@ public class ProfessorService {
 
 
     @Transactional
-    public Professor salvar(ProfessorCadastroDTO dto) {
+    public Professor salvar(ProfessorCadastroDTO dto, UUID idUsuario) {
         Professor entity = mapper.toEntity(dto);
         entity.setCpf(limparCpf(dto.cpf()));
         validator.validar(entity);
@@ -52,7 +52,7 @@ public class ProfessorService {
             }
             entity.setCursos(cursosEncontrados);
         }
-        entity.setUsuarioAtualizacao(securityService.obterUsuarioLogado().getId());
+        entity.setIdUsuario(idUsuario);
         return professorRepository.save(entity);
     }
 

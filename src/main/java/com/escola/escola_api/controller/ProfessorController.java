@@ -24,11 +24,12 @@ public class ProfessorController implements GenericController{
 
     private final ProfessorService professorService;
 
+    // Cadastro feito apenas por ADMIN, sem conta de usuário vinculado.
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public URI salvar(@RequestBody @Valid ProfessorCadastroDTO dto) {
-        Professor entity = professorService.salvar(dto);
+        Professor entity = professorService.salvar(dto, null);
         return gerarHeaderLocationMatricula(entity.getMatricula());
     }
 
