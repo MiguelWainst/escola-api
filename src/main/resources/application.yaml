@@ -21,7 +21,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
 
-
 regras-negocio:
   max-alunos-por-curso: 100
   max-cursos-por-professor: 5

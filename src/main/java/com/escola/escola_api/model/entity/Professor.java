@@ -39,6 +39,8 @@ public class Professor {
 
     private String cpf;
 
+    private UUID idUsuario;
+
     @CreatedDate
     private LocalDate dataContratacao;
 
