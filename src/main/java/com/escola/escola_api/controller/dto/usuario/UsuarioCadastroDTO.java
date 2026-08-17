@@ -1,10 +1,10 @@
 package com.escola.escola_api.controller.dto.usuario;
 
+import com.escola.escola_api.controller.dto.aluno.AlunoCadastroDTO;
+import com.escola.escola_api.controller.dto.professor.ProfessorCadastroDTO;
 import com.escola.escola_api.validator.DominioEmailValido;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 public record UsuarioCadastroDTO(
         @NotBlank(message = "O username é obrigatório")
@@ -19,6 +19,28 @@ public record UsuarioCadastroDTO(
         @NotBlank(message = "O email é obrigatório")
         @DominioEmailValido(message = "Domínio inválido")
         @Email(message = "O email deve ser válido")
-        String email
+        String email,
+
+        @NotNull
+        TipoConta tipoConta,
+
+        @Valid
+        AlunoCadastroDTO dadosAluno,
+
+        @Valid
+        ProfessorCadastroDTO dadosProfessor
 ) {
+        @SuppressWarnings("unused")
+        @AssertTrue(message = "Os dados enviados não correspondem ao tipo de conta escolhido.")
+        public boolean isTipoContaConsistente() {
+                if (tipoConta == null) return true;
+
+                boolean temAluno = dadosAluno != null;
+                boolean temProfessor = dadosProfessor != null;
+
+                return switch (tipoConta) {
+                    case ALUNO -> temAluno && !temProfessor;
+                    case PROFESSOR -> temProfessor && !temAluno;
+                };
+        }
 }
