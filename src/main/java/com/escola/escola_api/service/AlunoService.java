@@ -37,11 +37,11 @@ public class AlunoService {
     @Transactional
     public Aluno salvar(AlunoCadastroDTO dto, UUID idUsuario) {
         Aluno aluno = mapper.toEntity(dto);
+        aluno.setCpf(limparCpf(dto.cpf()));
         if (dto.idCurso() != null) {
             aluno.setCurso(cursoRepository.findById(dto.idCurso())
                     .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado.")));
         }
-        aluno.setCpf(limparCpf(dto.cpf()));
         validator.validar(aluno);
         aluno.setIdUsuario(idUsuario);
         return alunoRepository.save(aluno);

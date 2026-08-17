@@ -44,7 +44,6 @@ public class ProfessorService {
     public Professor salvar(ProfessorCadastroDTO dto, UUID idUsuario) {
         Professor entity = mapper.toEntity(dto);
         entity.setCpf(limparCpf(dto.cpf()));
-        validator.validar(entity);
         if (dto.idCurso() != null && !dto.idCurso().isEmpty()) {
             List<Curso> cursosEncontrados = cursoRepository.findAllById(dto.idCurso());
             if (cursosEncontrados.size() != dto.idCurso().size()){
@@ -52,6 +51,7 @@ public class ProfessorService {
             }
             entity.setCursos(cursosEncontrados);
         }
+        validator.validar(entity);
         entity.setIdUsuario(idUsuario);
         return professorRepository.save(entity);
     }
