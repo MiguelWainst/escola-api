@@ -33,6 +33,8 @@ public class Aluno {
 
     private String cpf;
 
+    private UUID idUsuario;
+
     @CreatedDate
     private LocalDate dataMatricula;
 

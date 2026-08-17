@@ -32,7 +32,6 @@ public class ProfessorController implements GenericController{
         return gerarHeaderLocationMatricula(entity.getMatricula());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public Page<ProfessorView> listar(
@@ -45,7 +44,6 @@ public class ProfessorController implements GenericController{
         return professorService.listar(nome, matricula, cpf, usuarioAtualizacao, pageable);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'PROFESSOR')")
     @GetMapping("/{matricula}")
     @ResponseStatus(HttpStatus.OK)
     public ProfessorPesquisaDTO obterPorMatricula(@PathVariable Integer matricula) {

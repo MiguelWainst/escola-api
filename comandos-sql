@@ -16,6 +16,7 @@ create table professores(
 	data_contratacao timestamp not null,
 	data_atualizacao timestamp,
 	usuario_atualizacao uuid
+	id_usuario uuid unique references usuarios(id)
 )
 
 create table professores_cursos(
@@ -36,6 +37,7 @@ create table alunos(
 	data_atualizacao timestamp,
 	usuario_atualizacao uuid,
 	id_curso uuid,
+    id_usuario uuid unique references usuarios(id)
 
 	constraint fk_aluno_curso foreign key (id_curso) references cursos(id)
 )
