@@ -14,7 +14,7 @@ public class CursoSpec {
             List<Predicate> predicates = new ArrayList<>();
             if (id != null) predicates.add(cb.equal(root.get("id"), id));
             if (nome != null && !nome.isBlank()) predicates.add(cb.like(cb.lower(root.get("nome")), "%" + nome.toLowerCase() + "%"));
-            if (cargaHoras != null) predicates.add(cb.equal(root.get("caraHoras"), cargaHoras));
+            if (cargaHoras != null) predicates.add(cb.equal(root.get("cargaHoras"), cargaHoras));
             if (usuarioAtualizacao != null) predicates.add(cb.equal(root.get("usuarioAtualizacao"), usuarioAtualizacao));
             return cb.and(predicates.toArray(Predicate[]::new));
         };

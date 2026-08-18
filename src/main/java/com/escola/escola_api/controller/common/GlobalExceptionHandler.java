@@ -6,6 +6,7 @@ import com.escola.escola_api.exception.*;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -88,34 +90,10 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ExceptionHandler({AuthorizationDeniedException.class, AccessDeniedException.class, AcessoNegadoException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErroResposta handleAuthorizationDeniedException() {
-        return new ErroResposta(
-                HttpStatus.FORBIDDEN.value(),
-                "Acesso negado: Não tem permissão necessária para a ação.",
-                List.of()
-        );
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErroResposta handleAccessDeniedException() {
-        return new ErroResposta(
-                HttpStatus.FORBIDDEN.value(),
-                "Acesso negado: Não tem permissão necessária para a ação.",
-                List.of()
-        );
-    }
-
-    @ExceptionHandler(AcessoNegadoException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErroResposta handleAcessoNegadoException() {
-        return new ErroResposta(
-                HttpStatus.FORBIDDEN.value(),
-                "Acesso negado: Não tem permissão necessária para a ação.",
-                List.of()
-        );
+    public ErroResposta handleAcessoNegado() {
+        return new ErroResposta(HttpStatus.FORBIDDEN.value(), "Acesso negado: Não tem permissão necessária para a ação.", List.of());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -149,44 +127,12 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(AlunoComCursoException.class)
+    @ExceptionHandler({CursoJaVinculadoException.class, AlunoComCursoException.class,
+            CursoLotadoException.class, ProfessorLotadoException.class,
+            EntidadeJaVinculadaException.class, UsuarioRolesException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErroResposta handleAlunoComCursoException(AlunoComCursoException e) {
-        return new ErroResposta(
-                HttpStatus.CONFLICT.value(),
-                e.getMessage(),
-                List.of()
-        );
-    }
-
-    @ExceptionHandler(CursoComVinculoException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErroResposta handleCursoComVinculoException(CursoComVinculoException e) {
-        return new ErroResposta(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(),
-                List.of()
-        );
-    }
-
-    @ExceptionHandler(CursoLotadoException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErroResposta handleCursoLotadoException(CursoLotadoException e) {
-        return new ErroResposta(
-                HttpStatus.CONFLICT.value(),
-                e.getMessage(),
-                List.of()
-        );
-    }
-
-    @ExceptionHandler(ProfessorLotadoException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErroResposta handleProfessorLotadoException(ProfessorLotadoException e) {
-        return new ErroResposta(
-                HttpStatus.CONFLICT.value(),
-                e.getMessage(),
-                List.of()
-        );
+    public ErroResposta handleConflito(RuntimeException e) {
+        return new ErroResposta(HttpStatus.CONFLICT.value(), e.getMessage(), List.of());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -194,26 +140,6 @@ public class GlobalExceptionHandler {
     public ErroResposta handleBadCredentialsException(BadCredentialsException e) {
         return new ErroResposta(
                 HttpStatus.UNAUTHORIZED.value(),
-                e.getLocalizedMessage(),
-                List.of()
-        );
-    }
-
-    @ExceptionHandler(EntidadeJaVinculadaException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErroResposta handleEntidadeJaVinculadaException(EntidadeJaVinculadaException e) {
-        return new ErroResposta(
-                HttpStatus.CONFLICT.value(),
-                e.getMessage(),
-                List.of()
-        );
-    }
-
-    @ExceptionHandler(UsuarioRolesException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErroResposta handleUsuarioRolesDuplicadasException(UsuarioRolesException e) {
-        return new ErroResposta(
-                HttpStatus.CONFLICT.value(),
                 e.getMessage(),
                 List.of()
         );
@@ -222,7 +148,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErroResposta handleRuntimeException(RuntimeException e) {
-        e.printStackTrace();
+        log.error("Erro interno não tratado", e);
         return new ErroResposta(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Erro: Ocorreu um erro interno no servidor.",
