@@ -17,5 +17,4 @@ public final class ValidConst {
     public static final int USUARIO_MIN = 3;
     public static final int SENHA_MAX = 50;
     public static final int SENHA_MIN = 8;
-
 }
