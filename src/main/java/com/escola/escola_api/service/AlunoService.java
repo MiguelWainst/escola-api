@@ -3,7 +3,6 @@ package com.escola.escola_api.service;
 import com.escola.escola_api.configuration.RegraNegocioProperties;
 import com.escola.escola_api.controller.dto.aluno.*;
 import com.escola.escola_api.exception.AcessoNegadoException;
-import com.escola.escola_api.exception.AlunoComCursoException;
 import com.escola.escola_api.exception.CursoLotadoException;
 import com.escola.escola_api.model.entity.Aluno;
 import com.escola.escola_api.model.entity.Curso;
@@ -96,10 +95,8 @@ public class AlunoService {
     public void vincular(Integer matricula, UUID curso) {
         Aluno aluno = alunoRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado!"));
-        if (aluno.getCurso() != null) {
-            throw new AlunoComCursoException("Este aluno já está vinculado a um curso!");
-        }
-        Curso cursoEncontrado = cursoRepository.findById(curso).orElseThrow(() -> new EntityNotFoundException("Curso não encontrado!"));
+        Curso cursoEncontrado = cursoRepository.findById(curso)
+                .orElseThrow(() -> new EntityNotFoundException("Curso não encontrado!"));
         if (cursoEncontrado.getAlunos().size() < regras.getMaxAlunosPorCurso()) {
             aluno.setCurso(cursoEncontrado);
             return;
