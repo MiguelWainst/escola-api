@@ -5,6 +5,8 @@ create table cursos(
 	data_criacao timestamp not null,
     data_atualizacao timestamp,
     usuario_atualizacao uuid
+    descricao TEXT;
+    capa_url VARCHAR(500);
 )
 
 create table professores(
