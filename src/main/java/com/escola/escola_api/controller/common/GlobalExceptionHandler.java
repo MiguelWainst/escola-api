@@ -179,6 +179,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ProfessorLotadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleProfessorLotadoException(ProfessorLotadoException e) {
+        return new ErroResposta(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErroResposta handleBadCredentialsException(BadCredentialsException e) {
@@ -192,6 +202,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntidadeJaVinculadaException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErroResposta handleEntidadeJaVinculadaException(EntidadeJaVinculadaException e) {
+        return new ErroResposta(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(UsuarioRolesException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleUsuarioRolesDuplicadasException(UsuarioRolesException e) {
         return new ErroResposta(
                 HttpStatus.CONFLICT.value(),
                 e.getMessage(),
