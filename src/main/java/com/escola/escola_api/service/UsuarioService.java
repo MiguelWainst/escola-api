@@ -1,7 +1,9 @@
 package com.escola.escola_api.service;
 
+import com.escola.escola_api.controller.dto.usuario.Roles;
 import com.escola.escola_api.controller.dto.usuario.UsuarioCadastroDTO;
 import com.escola.escola_api.controller.dto.usuario.UsuarioPesquisaDTO;
+import com.escola.escola_api.exception.UsuarioRolesException;
 import com.escola.escola_api.model.entity.Usuario;
 import com.escola.escola_api.repository.AlunoRepository;
 import com.escola.escola_api.repository.ProfessorRepository;
@@ -14,17 +16,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final ProfessorRepository professorRepository;
-    private final AlunoRepository alunoRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioValidator validator;
     private final UsuarioMapper mapper;
@@ -55,6 +54,29 @@ public class UsuarioService {
         return usuarioRepository.findByUsername(username);
     }
 
+    @Transactional
+    public void promover(UUID idUsuario, Set<Roles> rolesNovas) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
+        usuario.getRoles().remove("GUEST");
+        Set<String> rolesString = rolesNovas.stream().map(Enum::name).collect(Collectors.toSet());
+        Set<String> intersecao = new HashSet<>(usuario.getRoles());
+        intersecao.retainAll(rolesString);
+        if (!intersecao.isEmpty()) throw new UsuarioRolesException("Usuário já possúi role(s): " + intersecao);
+        usuario.getRoles().addAll(rolesString);
+    }
+
+    @Transactional
+    public void removerRole(UUID idUsuario, Set<Roles> rolesRemover) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
+        if(rolesRemover.isEmpty()) return;
+        Set<String> rolesRemoverString = rolesRemover.stream().map(Enum::name).collect(Collectors.toSet());
+        if(usuario.getRoles().stream().noneMatch(rolesRemoverString::contains))
+            throw new UsuarioRolesException("O Usuário não contém nenhuma dessas roles");
+        usuario.getRoles().removeAll(rolesRemoverString);
+        if (usuario.getRoles().isEmpty()) usuario.getRoles().add("GUEST");
+    }
     // Comming soon
 //    @Transactional
 //    public void vincularUsuarioProfessor(Integer matricula, UUID idUsuario) {
