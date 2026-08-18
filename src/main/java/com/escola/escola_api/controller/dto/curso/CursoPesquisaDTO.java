@@ -8,6 +8,8 @@ public record CursoPesquisaDTO(
         String nome,
         Integer cargaHoras,
         List<Integer> matriculaAlunos,
-        UUID usuarioAtualizacao
+        UUID usuarioAtualizacao,
+        String descricao,
+        String capaUrl
 ) implements CursoView{
 }

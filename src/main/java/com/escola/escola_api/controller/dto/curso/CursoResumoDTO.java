@@ -5,6 +5,8 @@ import java.util.UUID;
 public record CursoResumoDTO(
         UUID id,
         String nome,
-        Integer cargaHoras
+        Integer cargaHoras,
+        String descricao,
+        String capaUrl
 ) implements CursoView{
 }
