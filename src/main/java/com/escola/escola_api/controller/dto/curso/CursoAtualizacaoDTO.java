@@ -8,6 +8,9 @@ public record CursoAtualizacaoDTO(
         String nome,
         @Min(value = ValidConst.CARGA_HORA_MIN, message = "A carga horária deve ser de no mínimo {value} hora")
         @Max(value = ValidConst.CARGA_HORA_MAX, message = "A carga horária não pode ultrapassar {value} horas")
-        Integer cargaHoras
+        Integer cargaHoras,
+        String descricao,
+        @Size(max = 500, message = "Tamanho da URL não pode ser maior que 500")
+        String capaUrl
 ) {
 }
